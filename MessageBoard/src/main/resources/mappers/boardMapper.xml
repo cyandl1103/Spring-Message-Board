@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.board.mappers.board">
+	<!-- SQL의 모든 쿼리들을 작성함 -->
+	<!-- 모든 게시글 조회하기 -->
+	<select id="list" resultType="com.board.domain.BoardDTO">
+		select
+			seq, subject, content, name, reg_date, readCount
+		from
+			board;
+	</select>
+	
+	<!-- 현재 가장 큰 seq(번호) 가져오기 -->
+	<select id="maxSeq" resultType="java.lang.Integer">
+		select
+			max(seq)
+		from
+			board;
+	</select>
+	
+	<!-- 게시글 삽입 -->
+	<insert id="register">
+		insert into
+			board(
+				seq, subject, content, name, reg_date, readCount
+			)
+			values(
+				#{seq}, #{subject}, #{content}, #{name}, #{reg_date},0
+			);
+	</insert>
+	
+	<update id="updateReadCount">
+		update
+			board
+		set
+			readcount = readcount + 1
+		where
+			seq = #{seq};
+	</update>
+	
+	<select id="view" resultType="com.board.domain.BoardDTO">
+		select
+			seq, subject, content, name, reg_date, readCount
+		from
+			board
+		where
+			seq = #{seq};
+	</select>
+	
+	<delete id="delete">
+		delete from
+			board
+		where
+			seq = #{seq};
+	</delete>
+	
+	<update id="update">
+		update
+			board
+		set
+			subject = #{subject}, 
+			content = #{content}
+		where
+			seq = #{seq};
+	</update>
+
+</mapper>
