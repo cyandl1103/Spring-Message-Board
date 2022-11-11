@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.board.domain.BoardDTO;
@@ -71,6 +72,7 @@ public class BoardController {
 		
 	}
 	
+	
 	@ResponseBody
 	@RequestMapping(value = "/delete", method = RequestMethod.POST)
 	public String delete(Locale locale, Model model, HttpServletRequest request) throws Exception {
@@ -101,5 +103,14 @@ public class BoardController {
 		}else {
 			return "N";
 		}
+	}
+	
+	
+	//@ResponseBody
+	@RequestMapping(value = "/search", method = RequestMethod.GET)
+	public String search(Locale locale, Model model, @RequestParam String subject) throws Exception {
+		List<BoardDTO> dto = service.search(subject);
+		model.addAttribute("search", dto);
+		return "/board/search";
 	}
 }

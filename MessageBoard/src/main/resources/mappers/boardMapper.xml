@@ -65,5 +65,15 @@
 		where
 			seq = #{seq};
 	</update>
+	
+	<select id="search" resultType="com.board.domain.BoardDTO">
+		select 
+			seq, subject, content, name, reg_date, readCount
+		from
+			board
+		where
+			subject like CONCAT('%',#{subject},'%');
+<!-- 			subject like #{subject}; -->
+	</select>
 
 </mapper>

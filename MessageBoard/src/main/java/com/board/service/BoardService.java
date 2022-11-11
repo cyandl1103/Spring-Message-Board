@@ -11,5 +11,6 @@ public interface BoardService {
 	public BoardDTO view(int seq);
 	public int delete(int seq);
 	public int update(BoardDTO dto);
+	public List<BoardDTO> search(String subject) throws Exception ;
 		
 }

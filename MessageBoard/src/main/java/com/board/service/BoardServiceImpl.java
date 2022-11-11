@@ -44,9 +44,14 @@ public class BoardServiceImpl implements BoardService {
 		return dao.delete(seq);
 	}
 	
-@Override
+	@Override
 	public int update(BoardDTO dto) {
 		return dao.update(dto);
+	}
+	
+	@Override
+	public List<BoardDTO> search(String subject) throws Exception {
+		return dao.search(subject);
 	}
 	
 }

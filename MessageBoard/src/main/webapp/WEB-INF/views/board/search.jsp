@@ -12,10 +12,7 @@
 <title>게시판 웹 사이트</title>
 </head>
 <body>
-	<form id="searchForm" method="get" action="/board/search">
-			제목 : <input type="text" id="subject" name="subject" placeholder="검색어를 입력하세요" required>
-			<button type="submit">검색</button>
-	</form>
+	<h3>" ${param.subject} "  에 대한 검색 결과 </h3>
 	<form id="frm">
 		<input type="hidden" value="" name="seq" id="seq">
 		<table border="0">
@@ -30,20 +27,20 @@
 				</tr>	
 			</thead>
 			<tbody>
-				<c:forEach items="${list}" var="list">
+				<c:forEach items="${search}" var="search">
 					<tr align="center">
-						<td> ${list.seq} </td>
-						<td> <a href="#" onclick="fn_goView(${list.seq})"> ${list.subject} </a> </td>
-						<td> ${list.content} </td>
-						<td> ${list.name} </td>
-						<fmt:parseDate value="${list.reg_date}" var="dateValue" pattern="yyyyMMddHHmmss"/>
+						<td> ${search.seq} </td>
+						<td> <a href="#" onclick="fn_goView(${search.seq})"> ${search.subject} </a> </td>
+						<td> ${search.content} </td>
+						<td> ${search.name} </td>
+						<fmt:parseDate value="${search.reg_date}" var="dateValue" pattern="yyyyMMddHHmmss"/>
 						<td> <fmt:formatDate value="${dateValue}" pattern="yyyy-MM-dd"/> </td>
-						<td> ${list.readCount} </td>
+						<td> ${search.readCount} </td>
 					</tr>
 				</c:forEach>
 			</tbody>
 		</table>
-		<button type="button" onclick="location.href='registerView'">글 쓰기</button>
+		<button type="button" onclick="location.href='/board/list'">목록</button>
 	</form>
 </body>
 </html>

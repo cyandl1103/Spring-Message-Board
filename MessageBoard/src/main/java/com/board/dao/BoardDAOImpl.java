@@ -47,12 +47,16 @@ public class BoardDAOImpl implements BoardDAO {
 	
 	@Override
 	public int delete(int seq) {
-		return sqlSession.delete(namespace+".delete", seq);
+		return sqlSession.delete(namespace + ".delete", seq);
 	}
 	
 	@Override
 	public int update(BoardDTO dto) {
-		return sqlSession.delete(namespace+".update", dto);
+		return sqlSession.delete(namespace + ".update", dto);
 	}
 	
+	@Override
+	public List<BoardDTO> search(String subject) throws Exception  {
+		return sqlSession.selectList(namespace + ".search", subject);
+	}
 }
