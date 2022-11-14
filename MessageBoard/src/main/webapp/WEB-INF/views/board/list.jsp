@@ -10,40 +10,67 @@
 <head>
 <meta charset="UTF-8">
 <title>게시판 웹 사이트</title>
+
+<!--  bootstrap css -->
+<link rel="stylesheet" 
+	href="${pageContext.request.contextPath}/resources/css/bootstrap.css">
+	
+<link rel="stylesheet" 
+	href="${pageContext.request.contextPath}/resources/css/custom.css">
+	
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Black+And+White+Picture&family=Black+Han+Sans&family=Cute+Font&family=Do+Hyeon&family=Dokdo&family=East+Sea+Dokdo&family=Gaegu&family=Gamja+Flower&family=Gothic+A1&family=Gugi&family=Hi+Melody&family=Jua&family=Kirang+Haerang&family=Nanum+Brush+Script&family=Nanum+Gothic&family=Nanum+Gothic+Coding&family=Nanum+Myeongjo&family=Nanum+Pen+Script&family=Noto+Sans+KR&family=Noto+Serif+KR&family=Poor+Story&family=Single+Day&family=Song+Myung&family=Stylish&family=Sunflower:wght@300&family=Yeon+Sung&display=swap" rel="stylesheet">
 </head>
 <body>
-	<form id="searchForm" method="get" action="/board/search">
-			제목 : <input type="text" id="subject" name="subject" placeholder="검색어를 입력하세요" required>
-			<button type="submit">검색</button>
-	</form>
-	<form id="frm">
-		<input type="hidden" value="" name="seq" id="seq">
-		<table border="0">
-			<thead>
-				<tr>
-					<th>번호</th>
-					<th>제목</th>
-					<th>내용</th>
-					<th>작성자</th>
-					<th>날짜</th>
-					<th>조회수</th>
-				</tr>	
-			</thead>
-			<tbody>
-				<c:forEach items="${list}" var="list">
+	<div class="board-header">
+		<nav class="navbar navbar-dark bg-dark">
+			<div class="body-title">
+				<img src="${path}/resources/images/logo.png" class="board-logo" alt="Logo Image">
+				<a class="navbar-brand" href="/board/list">게시판 웹 사이트</a>
+			</div>
+			<form class="form-inline" id="searchForm" method="get" action="/board/search">
+					<input class="form-control mr-sm-2" type="text" id="subject" name="subject" placeholder="검색어를 입력하세요" required>
+					<button class="btn btn-primary" type="submit">검색</button>
+			</form>
+		</nav>
+	</div>
+	
+	<div class="body-container">
+		<div class="frm-title">
+		게시판 목록
+		</div>
+		<form id="frm">
+			<input type="hidden" value="" name="seq" id="seq">
+			<table class="table">
+				<thead class="table table-hover">
 					<tr align="center">
-						<td> ${list.seq} </td>
-						<td> <a href="#" onclick="fn_goView(${list.seq})"> ${list.subject} </a> </td>
-						<td> ${list.content} </td>
-						<td> ${list.name} </td>
-						<fmt:parseDate value="${list.reg_date}" var="dateValue" pattern="yyyyMMddHHmmss"/>
-						<td> <fmt:formatDate value="${dateValue}" pattern="yyyy-MM-dd"/> </td>
-						<td> ${list.readCount} </td>
-					</tr>
-				</c:forEach>
-			</tbody>
-		</table>
-		<button type="button" onclick="location.href='registerView'">글 쓰기</button>
-	</form>
+						<th scope="col">번호</th>
+						<th scope="col">제목</th>
+						<th scope="col">내용</th>
+						<th scope="col">작성자</th>
+						<th scope="col">날짜</th>
+						<th scope="col">조회수</th>
+					</tr>	
+				</thead>
+				<tbody>
+					<c:forEach items="${list}" var="list">
+						<tr align="center">
+							<th scope="row"> ${list.seq} </th>
+							<td class="body-content"> <a href="#" onclick="fn_goView(${list.seq})"> ${list.subject} </a> </td>
+							<td class="body-content"> ${list.content} </td>
+							<td class="body-content"> ${list.name} </td>
+							<fmt:parseDate value="${list.reg_date}" var="dateValue" pattern="yyyyMMddHHmmss"/>
+							<td> <fmt:formatDate value="${dateValue}" pattern="yyyy-MM-dd"/> </td>
+							<td> ${list.readCount} </td>
+						</tr>
+					</c:forEach>
+				</tbody>
+			</table>
+			<div class="frm-button">
+				<button class="btn btn-primary" type="button" onclick="location.href='registerView'">글 쓰기</button>
+			</div>
+		</form>
+	</div>
+	
 </body>
 </html>

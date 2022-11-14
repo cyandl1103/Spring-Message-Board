@@ -35,6 +35,7 @@ public class BoardController {
 	public String list(Locale locale, Model model) throws Exception {
 		List<BoardDTO> list = service.list();
 		// model.addAttribute(view에서의 변수 이름, controller에서의 변수 이름)
+		// 매핑해서 view 부분으로 넘김
 		model.addAttribute("list", list);
 		
 		return "/board/list";

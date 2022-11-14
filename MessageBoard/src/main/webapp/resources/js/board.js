@@ -69,7 +69,19 @@ function fn_boardDelete(seq){
 			console.log("data : ' " + data + " '");
 		}
 	});
-}
+};
+
+// 해당 번호(seq) 게시글 수정
+function fn_goUpdateView(seq){
+	$("#seq").val(seq);
+
+	var f = $("#frm");
+	f.attr("action", "/board/goUpdateView");
+	f.attr("method", "POST");
+	f.submit();
+
+};
+
 
 // 해당 번호(seq) 게시글 수정
 function fn_boardUpdate(){
@@ -104,16 +116,5 @@ function fn_boardUpdate(){
 			console.log("data : ' " + data + " '");
 		}
 	});
-
-}
-
-// 해당 번호(seq) 게시글 수정
-function fn_goUpdateView(seq){
-	$("#seq").val(seq);
-
-	var f = $("#frm");
-	f.attr("action", "/board/goUpdateView");
-	f.attr("method", "POST");
-	f.submit();
 
 };
