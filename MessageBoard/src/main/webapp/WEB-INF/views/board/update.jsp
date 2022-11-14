@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="EUC-KR">
+<meta charset="EUC-KR" name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="${path}/resources/js/board.js" charset="utf-8"></script>
 <title>게시판 웹 사이트</title>
@@ -43,12 +43,12 @@
 			</tr>
 			<tr>
 				<th scope="row">내용</th>
-				<td><input class="form-control mr-sm-2" type="text" placeholder="내용" id="content" name="content" value="${view.content}"></td>
+				<td><textarea class="form-control mr-sm-2" placeholder="내용" id="content" name="content" maxlength="1000" rows="8">${view.content}</textarea></td>
 			</tr>
 			<tr>
 				<td colspan="2" style="padding-top: 20px;">
-					<button  class="btn btn-primary" type="button" onclick="fn_boardUpdate();"> 수정 </button>
-					<button class="btn btn-primary" type="button" onclick='location.href="javascript:history.back();"' style="float: right;">취소</button>
+					<button  class="btn btn-primary" type="button" onclick="fn_boardUpdate();" style="float: right;"> 수정 </button>
+					<button class="btn btn-primary" type="button" onclick='location.href="javascript:history.back();"'>취소</button>
 				</td>
 			</tr>
 		</table>

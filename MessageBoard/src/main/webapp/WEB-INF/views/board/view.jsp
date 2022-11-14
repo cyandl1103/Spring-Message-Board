@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="EUC-KR">
+<meta charset="EUC-KR" name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="${path}/resources/js/board.js" charset="utf-8"></script>
 <title>게시판 웹 사이트</title>
@@ -36,11 +36,11 @@
 					<td> ${view.name}</td>
 				</tr>
 				<tr>
-					<th scope="row">내용</th>
-					<td> ${view.content}</td>
+					<th scope="row" width="90px" >내용</th>
+					<td style="word-break:break-all"> ${view.content}</td>
 				</tr>
 				<tr>
-					<td colspan="3">
+					<td colspan="3" style="padding-top: 20px;">
 						<button class="btn btn-primary" type="button" onclick='location.href="/board/list"'>목록</button>
 						<button class="btn btn-primary" type="button" onclick='fn_goUpdateView(${view.seq})'>수정</button>
 						<button class="btn btn-primary" type="button" onclick='fn_boardDelete(${view.seq})'>삭제</button>
