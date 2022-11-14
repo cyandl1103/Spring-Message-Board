@@ -1,0 +1,67 @@
+.frm-title {
+	font-size: xx-large;
+	padding-top: 10px;
+    padding-bottom: 20px;
+}
+
+.frm-button {
+	padding-top: 30px;
+    float: right;
+}
+
+.board-header {
+	font-family: 'Noto Sans KR', sans-serif;
+	font-size: xx-large;
+    overflow: hidden;
+    background-color: #343a40;
+    padding: 10px 10px;
+	
+}
+
+.board-logo{
+	width: 25px;
+	filter: invert(1);
+}
+
+
+.body-title {
+	justify-content: flex-start;
+}
+
+.body-container {
+	padding: 50px;
+	font-family: 'Noto Sans KR', sans-serif;
+}
+
+.body-content {
+	max-width:7rem;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	white-space:nowrap;
+}
+
+
+.home-header {
+	font-family: 'Noto Sans KR', sans-serif;
+	font-size: 1.7rem;
+    overflow: hidden;
+    background-color: #343a40;
+    padding: 50px 20px;
+    font-weight: bold;
+    color: white;
+}
+
+.home-content {
+	padding: 30px 10px;
+}
+
+.home-title {
+	justify-content: flex-start;
+}
+
+.home-logo{
+	width: 40px;
+	filter: invert(1);
+}
+
+
