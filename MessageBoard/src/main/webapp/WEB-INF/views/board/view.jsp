@@ -37,7 +37,7 @@
 				</tr>
 				<tr>
 					<th scope="row" width="90px" >³»¿ë</th>
-					<td style="word-break:break-all"> ${view.content}</td>
+					<td style="word-break:break-all">${view.content}</td>
 				</tr>
 				<tr>
 					<td colspan="3" style="padding-top: 20px;">

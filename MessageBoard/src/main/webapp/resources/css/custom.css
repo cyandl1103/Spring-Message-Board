@@ -64,4 +64,15 @@
 	filter: invert(1);
 }
 
+.body-pre {
+	font-family: 'Noto Sans KR', sans-serif;
+	font-size: 100%;
+}
 
+a{
+	color: #007bff;
+    text-decoration: none;
+    background-color: transparent;
+    vertical-align: middle;
+   
+}
