@@ -40,6 +40,9 @@
 	<div class="frm-title">
 		" ${param.subject} "  에 대한 검색 결과
 	</div>
+	<div class="frm-button">
+		<button class="btn btn-primary" type="button" onclick="location.href='/board/list'">목록</button>
+	</div>
 		<form id="frm">
 			<input type="hidden" value="" name="seq" id="seq">
 			<table class="table">
@@ -67,9 +70,6 @@
 					</c:forEach>
 				</tbody>
 			</table>
-			<div class="frm-button">
-				<button class="btn btn-primary" type="button" onclick="location.href='/board/list'">목록</button>
-			</div>
 		</form>
 	</div>
 </body>

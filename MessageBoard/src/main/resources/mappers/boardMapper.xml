@@ -75,5 +75,22 @@
 			subject like CONCAT('%',#{subject},'%');
 <!-- 			subject like #{subject}; -->
 	</select>
+	
+	<!-- FOR PAGING -->	
+		<!-- 	10개씩 select -->
+		<!-- 	limit n1, n2 -->
+		<!-- 	n1 :  skip 할 행의 수 -->
+		<!-- 	n2 :  count 할 행의 수 -->
+	<select id="pageList" resultType="com.board.domain.BoardDTO">
+		select seq, subject, content, name, reg_date, readCount 
+		from board 
+		order by seq desc
+		limit #{skip},#{amount};
+	</select>
+	
+	<select id="getTotal" resultType="int">
+		select count(*) 
+		from board;
+	</select>
 
 </mapper>

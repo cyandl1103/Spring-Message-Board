@@ -39,9 +39,5 @@
     	<constructor-arg index="0" ref="sqlSessionFactory"></constructor-arg>
     </bean>
     
-<!--     <bean id="board" class="org.mybatis.spring.mapper.MapperFactoryBean"> -->
-<!--     	<property name="mapperInterface" value="com.board.mappers.board"></property> -->
-<!--     	<property name="sqlSessionTemplate" ref="sqlSession"></property> -->
-<!--     </bean> -->
 		
 </beans>

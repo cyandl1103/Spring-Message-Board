@@ -7,6 +7,7 @@
 <html>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="${path}/resources/js/board.js" charset="utf-8"></script>
+<script src="${path}/resources/js/boardPage.js" charset="utf-8"></script>
 <head>
 <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
 <title>게시판 웹 사이트</title>
@@ -39,9 +40,12 @@
 		<div class="frm-title">
 		게시판 목록
 		</div>
+		<div class="frm-button">
+			<button class="btn btn-primary" type="button" onclick="location.href='registerView'">글 쓰기</button>
+		</div>
 		<form id="frm">
 			<input type="hidden" value="" name="seq" id="seq">
-			<table class="table">
+			<table class="table" id="listTable">
 				<thead class="table table-hover">
 					<tr align="center">
 						<th scope="col">번호</th>
@@ -54,7 +58,7 @@
 				</thead>
 				<tbody>
 					<c:forEach items="${list}" var="list">
-						<tr align="center">
+						<tr align="center" class="body-tr">
 							<th scope="row"> ${list.seq} </th>
 							<td class="body-content"> <a href="#" onclick="fn_goView(${list.seq})"> ${list.subject} </a> </td>
 							<td class="body-content"> ${list.content} </td>
@@ -66,10 +70,35 @@
 					</c:forEach>
 				</tbody>
 			</table>
-			<div class="frm-button">
-				<button class="btn btn-primary" type="button" onclick="location.href='registerView'">글 쓰기</button>
-			</div>
 		</form>
+		
+		<div class="pageInfo-wrap">
+			<div class="pageInfo_area">
+				<ul class="pageInfo" id="pageInfo">
+				
+					<!-- 이전페이지 버튼 -->
+	                <c:if test="${pageMaker.prev}">
+	                    <li class="pageInfo_btn previous"><a href="javascript:void(0);" onclick="fn_goPage(${pageMaker.startPage-1}); return false;">◀</a></li>
+	                </c:if>
+	                
+					<!-- 각 번호 페이지 버튼 -->
+	                <c:forEach var="num" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
+ 	                    <li class="pageInfo_btn"><a href="javascript:void(0);" onclick="fn_goPage(${num}); return false;" class="${pageMaker.cri.pageNum == num ? "active":"" }">${num}</a></li>	                  
+	                </c:forEach>
+	                
+	                <!-- 다음페이지 버튼 -->
+	                <c:if test="${pageMaker.next}">
+	                    <li class="pageInfo_btn next"><a href="javascript:void(0);" onclick="fn_goPage(${pageMaker.endPage+1}); return false;">▶</a></li>
+	                </c:if>    	                
+                </ul>
+			</div>
+		</div>
+		
+		<form id="pageFrm" method="get">
+			<input type="hidden" name="pageNum" id="pageNum" value="${pageMaker.cri.pageNum}"/>
+			<input type="hidden" name="amount" id="amount" value="${pageMaker.cri.amount}"/>
+		</form>
+		
 	</div>
 	
 </body>

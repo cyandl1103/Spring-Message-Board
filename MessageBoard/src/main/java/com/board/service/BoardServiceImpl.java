@@ -5,6 +5,7 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 import com.board.dao.BoardDAO;
 import com.board.domain.BoardDTO;
+import com.board.domain.Criteria;
 
 @Service
 public class BoardServiceImpl implements BoardService {
@@ -52,6 +53,16 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public List<BoardDTO> search(String subject) throws Exception {
 		return dao.search(subject);
+	}
+	
+	@Override
+	public List<BoardDTO> getListPaging(Criteria cri) {
+		return dao.getListPaging(cri);
+	}
+	
+	@Override
+	public int getTotal() {
+		return dao.getTotal();
 	}
 	
 }

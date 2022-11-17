@@ -8,6 +8,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 import com.board.domain.BoardDTO;
+import com.board.domain.Criteria;
 
 // 특정 클래스를 DAO로 표시하여 해당 역할을 명확히 해주는 주석
 @Repository
@@ -58,5 +59,15 @@ public class BoardDAOImpl implements BoardDAO {
 	@Override
 	public List<BoardDTO> search(String subject) throws Exception  {
 		return sqlSession.selectList(namespace + ".search", subject);
+	}
+	
+	@Override
+	public List<BoardDTO> getListPaging(Criteria cri) {
+		return sqlSession.selectList(namespace + ".pageList", cri);
+	}
+	
+	@Override
+	public int getTotal() {
+		return  sqlSession.selectOne(namespace + ".getTotal");
 	}
 }

@@ -15,4 +15,7 @@ public interface BoardDAO {
 	public int delete(int seq);
 	public int update(BoardDTO dto);
 	public List<BoardDTO> search(String subject) throws Exception ;
+	
+	public List<BoardDTO> getListPaging(Criteria cri);
+	public int getTotal();
 }

@@ -1,11 +1,12 @@
 .frm-title {
 	font-size: xx-large;
 	padding-top: 10px;
-    padding-bottom: 20px;
+    padding-bottom: 10px;
 }
 
 .frm-button {
-	padding-top: 30px;
+/* 	padding-top: 30px; */
+    padding-bottom: 20px;
     float: right;
 }
 
@@ -38,6 +39,11 @@
 	overflow:hidden;
 	text-overflow:ellipsis;
 	white-space:nowrap;
+}
+
+.body-tr:hover {
+	background-color: #eeeeee;
+	
 }
 
 
@@ -76,3 +82,38 @@ a{
     vertical-align: middle;
    
 }
+
+ .pageInfo{
+    list-style : none;
+    display: table;
+    margin: auto;    
+ }
+ 
+ .pageInfo li{
+    float: left;
+    font-size: 20px;
+    margin-left: 18px;
+    padding: 7px;
+    font-weight: 500;
+ }
+ 
+ a:link {
+ 	color:#007bff; 
+ 	text-decoration: none;
+ }
+ 
+ a:visited {
+	 color:#007bff; 
+	 text-decoration: none;
+ }
+ 
+ a:hover {
+ 	color:black; 
+ 	text-decoration: blink;
+ }
+ 
+ .active {
+ 	color: #343a40 !important;
+    //font-weight: bold;
+    pointer-events: none;
+ }

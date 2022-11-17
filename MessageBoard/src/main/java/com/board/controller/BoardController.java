@@ -1,5 +1,6 @@
 package com.board.controller;
 
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -9,15 +10,24 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.board.domain.BoardDTO;
+import com.board.domain.Criteria;
+import com.board.domain.PageMakerDTO;
 import com.board.service.BoardService;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
 
 /**
  * Handles requests for the application home page.
@@ -31,15 +41,15 @@ public class BoardController {
 	@Inject
 	private BoardService service;
 	
-	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public String list(Locale locale, Model model) throws Exception {
-		List<BoardDTO> list = service.list();
-		// model.addAttribute(view에서의 변수 이름, controller에서의 변수 이름)
-		// 매핑해서 view 부분으로 넘김
-		model.addAttribute("list", list);
-		
-		return "/board/list";
-	}
+//	@RequestMapping(value = "/list", method = RequestMethod.GET)
+//	public String list(Locale locale, Model model) throws Exception {
+//		List<BoardDTO> list = service.list();
+//		// model.addAttribute(view에서의 변수 이름, controller에서의 변수 이름)
+//		// 매핑해서 view 부분으로 넘김
+//		model.addAttribute("list", list);
+//		
+//		return "/board/list";
+//	}
 	
 	@RequestMapping(value = "/registerView", method = RequestMethod.GET)
 	public String regiView(Locale locale, Model model) throws Exception {
@@ -114,4 +124,67 @@ public class BoardController {
 		model.addAttribute("search", dto);
 		return "/board/search";
 	}
+	
+	
+	
+	  //@ResponseBody
+	  
+	  @RequestMapping(value = "/list", method = RequestMethod.GET) 
+	  public String list(Locale Locale, Criteria cri, Model model) throws Exception {
+		  List<BoardDTO> list = service.getListPaging(cri); //
+		  //model.addAttribute(view에서의 변수 이름, controller에서의 변수 이름) // 매핑해서 view 부분으로 넘김
+		  model.addAttribute("list", list);
+		  
+		  int total = service.getTotal(); 
+		  
+		  PageMakerDTO pageMake = new PageMakerDTO(cri,total); 
+		  model.addAttribute("pageMaker", pageMake);
+		  return "/board/list"; 
+	  }
+	 
+	
+	@ResponseBody
+	@RequestMapping(value = "/listPage", method = RequestMethod.GET, produces = "application/text; charset=utf8")
+	public String list(@RequestParam("pageNum") String pageNum, @RequestParam("amount") String amount, 
+			 Locale locale, Model model) throws Exception {
+		
+		Criteria cri = new Criteria(Integer.parseInt(pageNum), Integer.parseInt(amount));
+		List<BoardDTO> list = service.getListPaging(cri);
+		int total = service.getTotal();
+		
+		PageMakerDTO pageMake = new PageMakerDTO(cri, total);
+		
+		JsonObject resultJson = new JsonObject();
+		
+		JsonArray listJsonArray = new JsonArray();
+		for(int i = 0; i < list.size(); i++) {
+			JsonObject listJson = new JsonObject();
+			listJson.addProperty("seq", list.get(i).getSeq());
+			listJson.addProperty("subject", list.get(i).getSubject());
+			listJson.addProperty("content", list.get(i).getContent());
+			listJson.addProperty("name", list.get(i).getName());
+			listJson.addProperty("reg_date", list.get(i).getReg_date());
+			listJson.addProperty("readCount", list.get(i).getReadCount());
+			
+			listJsonArray.add(listJson);
+		}
+		
+		resultJson.add("list", listJsonArray);
+		
+		
+		JsonObject pageMakeJson = new JsonObject();
+		pageMakeJson.addProperty("startPage", pageMake.getStartPage());
+		pageMakeJson.addProperty("endPage", pageMake.getEndPage());
+		pageMakeJson.addProperty("prev", pageMake.isPrev());
+		pageMakeJson.addProperty("next", pageMake.isNext());
+		pageMakeJson.addProperty("total", pageMake.getTotal());
+		pageMakeJson.addProperty("pageNum", pageMake.getCri().getPageNum());
+		pageMakeJson.addProperty("amount", pageMake.getCri().getAmount());
+		
+		resultJson.add("pageMake", pageMakeJson);
+		String resultString = resultJson.toString();
+
+		return resultString;
+	}
+	
 }

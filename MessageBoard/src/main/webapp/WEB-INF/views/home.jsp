@@ -28,7 +28,7 @@
 			</div>
 		</nav>
 	</div>
-	
+
 	<div class="body-container">
 		<div class="home-content">
 			<P id="timeNow">  현재 시각 : ${serverTime}. </P>
