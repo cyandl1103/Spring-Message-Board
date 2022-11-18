@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.board.dao.BoardDAO;
 import com.board.domain.BoardDTO;
 import com.board.domain.Criteria;
+import com.board.domain.CriteriaSearch;
 
 @Service
 public class BoardServiceImpl implements BoardService {
@@ -63,6 +64,16 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public int getTotal() {
 		return dao.getTotal();
+	}
+	
+	@Override
+	public int getTotal(String subject) {
+		return dao.getTotal(subject);
+	}
+	
+	@Override
+	public List<BoardDTO> getSearchPaging(CriteriaSearch criSearch) throws Exception {
+		return dao.getSearchPaging(criSearch);
 	}
 	
 }

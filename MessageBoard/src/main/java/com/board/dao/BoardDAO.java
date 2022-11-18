@@ -17,5 +17,9 @@ public interface BoardDAO {
 	public List<BoardDTO> search(String subject) throws Exception ;
 	
 	public List<BoardDTO> getListPaging(Criteria cri);
+	
 	public int getTotal();
+	public int getTotal(String subject);
+	
+	public List<BoardDTO> getSearchPaging(CriteriaSearch criSearch) throws Exception;
 }

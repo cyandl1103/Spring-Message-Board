@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.board.domain.BoardDTO;
 import com.board.domain.Criteria;
+import com.board.domain.CriteriaSearch;
 import com.board.domain.PageMakerDTO;
 import com.board.service.BoardService;
 import com.google.gson.Gson;
@@ -117,17 +118,75 @@ public class BoardController {
 	}
 	
 	
-	//@ResponseBody
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
-	public String search(Locale locale, Model model, @RequestParam String subject) throws Exception {
-		List<BoardDTO> dto = service.search(subject);
-		model.addAttribute("search", dto);
+	public String search(Locale locale, Model model, Criteria cri, @RequestParam String subject) throws Exception {
+		
+		cri = new CriteriaSearch(subject);
+		CriteriaSearch criSearch = (CriteriaSearch)cri;
+
+		List<BoardDTO> list = service.getSearchPaging(criSearch);
+		model.addAttribute("search", list);
+		
+		int total = service.getTotal(subject); 
+		  
+		PageMakerDTO pageMake = new PageMakerDTO(cri,total); 
+		model.addAttribute("pageMaker", pageMake);
+		
 		return "/board/search";
 	}
 	
 	
+	@ResponseBody
+	@RequestMapping(value = "/searchPage", method = RequestMethod.GET, produces = "application/text; charset=utf8")
+	public String search(Locale locale, Model model,
+			@RequestParam("subject") String subject, @RequestParam("pageNum") String pageNum, @RequestParam("amount") String amount) 
+					throws Exception {
+		
+		Criteria cri = new Criteria(Integer.parseInt(pageNum), Integer.parseInt(amount));
+		cri = new CriteriaSearch(Integer.parseInt(pageNum), Integer.parseInt(amount), subject);
+		CriteriaSearch criSearch = (CriteriaSearch)cri;
+
+		List<BoardDTO> list = service.getSearchPaging(criSearch);
+		
+		int total = service.getTotal(subject); 
+		  
+		PageMakerDTO pageMake = new PageMakerDTO(cri,total); 
+		
+		JsonObject resultJson = new JsonObject();
+		
+		JsonArray listJsonArray = new JsonArray();
+		for(int i = 0; i < list.size(); i++) {
+			JsonObject listJson = new JsonObject();
+			listJson.addProperty("seq", list.get(i).getSeq());
+			listJson.addProperty("subject", list.get(i).getSubject());
+			listJson.addProperty("content", list.get(i).getContent());
+			listJson.addProperty("name", list.get(i).getName());
+			listJson.addProperty("reg_date", list.get(i).getReg_date());
+			listJson.addProperty("readCount", list.get(i).getReadCount());
+			
+			listJsonArray.add(listJson);
+		}
+		
+		resultJson.add("list", listJsonArray);
+		
+		
+		JsonObject pageMakeJson = new JsonObject();
+		pageMakeJson.addProperty("startPage", pageMake.getStartPage());
+		pageMakeJson.addProperty("endPage", pageMake.getEndPage());
+		pageMakeJson.addProperty("prev", pageMake.isPrev());
+		pageMakeJson.addProperty("next", pageMake.isNext());
+		pageMakeJson.addProperty("total", pageMake.getTotal());
+		pageMakeJson.addProperty("pageNum", pageMake.getCri().getPageNum());
+		pageMakeJson.addProperty("amount", pageMake.getCri().getAmount());
+		
+		resultJson.add("pageMake", pageMakeJson);
+		String resultString = resultJson.toString();
+
+		return resultString;
+	}
 	
-	  //@ResponseBody
+	
+	
 	  
 	  @RequestMapping(value = "/list", method = RequestMethod.GET) 
 	  public String list(Locale Locale, Criteria cri, Model model) throws Exception {

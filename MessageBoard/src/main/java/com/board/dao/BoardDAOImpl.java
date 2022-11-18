@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.board.domain.BoardDTO;
 import com.board.domain.Criteria;
+import com.board.domain.CriteriaSearch;
 
 // 특정 클래스를 DAO로 표시하여 해당 역할을 명확히 해주는 주석
 @Repository
@@ -68,6 +69,16 @@ public class BoardDAOImpl implements BoardDAO {
 	
 	@Override
 	public int getTotal() {
-		return  sqlSession.selectOne(namespace + ".getTotal");
+		return sqlSession.selectOne(namespace + ".getTotal");
+	}
+	
+	@Override
+	public int getTotal(String subject) {
+		return sqlSession.selectOne(namespace + ".getTotalSubject", subject);
+	}
+	
+	@Override
+	public List<BoardDTO> getSearchPaging(CriteriaSearch criSearch) throws Exception {
+		return sqlSession.selectList(namespace + ".pageSearch", criSearch);
 	}
 }

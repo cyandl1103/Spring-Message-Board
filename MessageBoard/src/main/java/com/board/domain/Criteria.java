@@ -11,7 +11,7 @@ public class Criteria {
 	// 기본 생성자
 	public Criteria() {
 		this.pageNum = 1;
-		this.amount = 10;
+		this.amount = 20;
 		this.skip = 0;
 	}
 	

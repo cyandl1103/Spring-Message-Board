@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.board.domain.BoardDTO;
 import com.board.domain.Criteria;
+import com.board.domain.CriteriaSearch;
 
 public interface BoardService {
 	
@@ -16,4 +17,7 @@ public interface BoardService {
 	
 	public List<BoardDTO> getListPaging(Criteria cri);
 	public int getTotal();
+	public int getTotal(String subject);
+	
+	public List<BoardDTO> getSearchPaging(CriteriaSearch criSearch) throws Exception;
 }

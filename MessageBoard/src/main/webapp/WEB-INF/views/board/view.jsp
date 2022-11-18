@@ -41,7 +41,7 @@
 				</tr>
 				<tr>
 					<td colspan="3" style="padding-top: 20px;">
-						<button class="btn btn-primary" type="button" onclick='location.href="/board/list"'>목록</button>
+						<button class="btn btn-primary" type="button" onclick='location.href="javascript:history.back();"'>목록</button>
 						<button class="btn btn-primary" type="button" onclick='fn_goUpdateView(${view.seq})'>수정</button>
 						<button class="btn btn-primary" type="button" onclick='fn_boardDelete(${view.seq})'>삭제</button>
 					</td>

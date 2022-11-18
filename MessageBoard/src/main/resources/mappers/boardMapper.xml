@@ -31,6 +31,7 @@
 			);
 	</insert>
 	
+	<!-- 조회수 증가 -->
 	<update id="updateReadCount">
 		update
 			board
@@ -40,6 +41,7 @@
 			seq = #{seq};
 	</update>
 	
+	<!-- 게시물 조회 -->
 	<select id="view" resultType="com.board.domain.BoardDTO">
 		select
 			seq, subject, content, name, reg_date, readCount
@@ -49,6 +51,7 @@
 			seq = #{seq};
 	</select>
 	
+	<!-- 게시물 삭제 -->
 	<delete id="delete">
 		delete from
 			board
@@ -56,6 +59,7 @@
 			seq = #{seq};
 	</delete>
 	
+	<!-- 게시물 삭제 -->
 	<update id="update">
 		update
 			board
@@ -66,14 +70,14 @@
 			seq = #{seq};
 	</update>
 	
+	<!-- 제목 기준으로 게시물 검색 -->
 	<select id="search" resultType="com.board.domain.BoardDTO">
-		select 
-			seq, subject, content, name, reg_date, readCount
-		from
-			board
-		where
-			subject like CONCAT('%',#{subject},'%');
+		select seq, subject, content, name, reg_date, readCount
+		from board
+		where subject like CONCAT('%',#{subject},'%')
+		order by seq desc
 <!-- 			subject like #{subject}; -->
+	
 	</select>
 	
 	<!-- FOR PAGING -->	
@@ -81,6 +85,7 @@
 		<!-- 	limit n1, n2 -->
 		<!-- 	n1 :  skip 할 행의 수 -->
 		<!-- 	n2 :  count 할 행의 수 -->
+	<!-- 게시물 목록 -->	
 	<select id="pageList" resultType="com.board.domain.BoardDTO">
 		select seq, subject, content, name, reg_date, readCount 
 		from board 
@@ -88,9 +93,28 @@
 		limit #{skip},#{amount};
 	</select>
 	
+	<!-- 총 게시물의 수 -->
 	<select id="getTotal" resultType="int">
 		select count(*) 
 		from board;
+	</select>
+	
+	<!-- 해당 제목을 가진 총 게시물의 수 -->
+	<select id="getTotalSubject" resultType="int">
+		select count(*) 
+		from board
+		where subject like CONCAT('%',#{subject},'%')
+		order by seq desc;
+	</select>
+	
+		<!-- 제목 기준으로 게시물 검색 -->
+	<select id="pageSearch" resultType="com.board.domain.BoardDTO">
+		select seq, subject, content, name, reg_date, readCount
+		from board
+		where subject like CONCAT('%',#{subject},'%')
+		order by seq desc
+		limit #{skip},#{amount};
+<!-- 			subject like #{subject}; -->
 	</select>
 
 </mapper>
