@@ -20,25 +20,31 @@
 <link href="https://fonts.googleapis.com/css2?family=Black+And+White+Picture&family=Black+Han+Sans&family=Cute+Font&family=Do+Hyeon&family=Dokdo&family=East+Sea+Dokdo&family=Gaegu&family=Gamja+Flower&family=Gothic+A1&family=Gugi&family=Hi+Melody&family=Jua&family=Kirang+Haerang&family=Nanum+Brush+Script&family=Nanum+Gothic&family=Nanum+Gothic+Coding&family=Nanum+Myeongjo&family=Nanum+Pen+Script&family=Noto+Sans+KR&family=Noto+Serif+KR&family=Poor+Story&family=Single+Day&family=Song+Myung&family=Stylish&family=Sunflower:wght@300&family=Yeon+Sung&display=swap" rel="stylesheet">
 
 <body>
-	<div class="home-header">
-		<nav class="navbar navbar-dark bg-dark">
-			<div class="home-title">
-				<img src="resources/images/logo.png" class="home-logo" alt="Logo Image">
-				<a>게시판 웹 사이트</a>
+	<div id="wrap">
+		<div class="home-header">
+			<nav class="navbar navbar-dark bg-dark">
+				<div class="home-title">
+					<img src="resources/images/logo.png" class="home-logo" alt="Logo Image">
+					<a>게시판 웹 사이트</a>
+				</div>
+			</nav>
+		</div>
+	
+		<div class="body-container">
+			<div class="home-content">
+				<P id="timeNow">  현재 시각 : ${serverTime}. </P>
 			</div>
-		</nav>
-	</div>
-
-	<div class="body-container">
-		<div class="home-content">
-			<P id="timeNow">  현재 시각 : ${serverTime}. </P>
+			<div class="home-button">
+				<button class="btn btn-primary" type="button" onclick='location.href="/board/list"'>게시판 목록</button>
+				<button class="btn btn-primary" type="button" onclick='practice();'>JS 연습</button>
+			</div>
 		</div>
-		<div class="home-button">
-			<button class="btn btn-primary" type="button" onclick='location.href="/board/list"'>게시판 목록</button>
-			<button class="btn btn-primary" type="button" onclick='practice();'>JS 연습</button>
+	
+		<div class="board-footer bg-dark">
+			<div class="footer-text">
+				Made with Spring Framework
+			</div>
 		</div>
 	</div>
-
-
 </body>
 </html>
