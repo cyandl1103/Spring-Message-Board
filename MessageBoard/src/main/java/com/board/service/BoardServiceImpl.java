@@ -7,6 +7,7 @@ import com.board.dao.BoardDAO;
 import com.board.domain.BoardDTO;
 import com.board.domain.Criteria;
 import com.board.domain.CriteriaSearch;
+import com.board.domain.ReplyDTO;
 
 @Service
 public class BoardServiceImpl implements BoardService {
@@ -32,6 +33,11 @@ public class BoardServiceImpl implements BoardService {
 			dto.setSeq(dao.getMaxSeq() + 1);
 		}
 		
+		return dao.register(dto);
+	}
+	
+	@Override
+	public int register(ReplyDTO dto) throws Exception {
 		return dao.register(dto);
 	}
 	
@@ -76,4 +82,8 @@ public class BoardServiceImpl implements BoardService {
 		return dao.getSearchPaging(criSearch);
 	}
 	
+	@Override
+	public List<ReplyDTO> replyList(int bseq) throws Exception {
+		return dao.replyList(bseq);
+	}
 }

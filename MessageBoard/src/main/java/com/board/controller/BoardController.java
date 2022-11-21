@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -24,7 +25,9 @@ import com.board.domain.BoardDTO;
 import com.board.domain.Criteria;
 import com.board.domain.CriteriaSearch;
 import com.board.domain.PageMakerDTO;
+import com.board.domain.ReplyDTO;
 import com.board.service.BoardService;
+import com.board.service.FileValidator;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -42,6 +45,9 @@ public class BoardController {
 	@Inject
 	private BoardService service;
 	
+	@Autowired
+	private FileValidator fileValidator;
+	
 //	@RequestMapping(value = "/list", method = RequestMethod.GET)
 //	public String list(Locale locale, Model model) throws Exception {
 //		List<BoardDTO> list = service.list();
@@ -52,11 +58,13 @@ public class BoardController {
 //		return "/board/list";
 //	}
 	
+	// 글쓰기로 이동
 	@RequestMapping(value = "/registerView", method = RequestMethod.GET)
 	public String regiView(Locale locale, Model model) throws Exception {
 		return "/board/register";
 	}
 	
+	// 새 글 등록
 	@ResponseBody
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public String register(Locale locale, Model model, BoardDTO dto) throws Exception {
@@ -76,10 +84,15 @@ public class BoardController {
 		}
 	}
 	
-	@RequestMapping(value = "/view", method = RequestMethod.POST)
+	@RequestMapping(value = "/view", method = RequestMethod.GET)
 	public String view(Locale locale, Model model, HttpServletRequest request) throws Exception {
 		BoardDTO dto = service.view(Integer.parseInt((String)request.getParameter("seq")));
 		model.addAttribute("view", dto);
+		
+		int bseq = dto.getSeq();
+		List<ReplyDTO> list = service.replyList(bseq);
+		model.addAttribute("list", list);
+		
 		return "/board/view";
 		
 	}
@@ -246,4 +259,24 @@ public class BoardController {
 		return resultString;
 	}
 	
+	
+	// 댓글 등록
+	@ResponseBody
+	@RequestMapping(value = "/reply/register", method = RequestMethod.POST)
+	public String replyRegister(Locale locale, Model model, ReplyDTO dto) throws Exception {
+		// 현재 시간
+		Date date = new Date(System.currentTimeMillis());
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+		dto.setReg_date(format.format(date));
+		
+		if(service.register(dto) == 1) {
+			//System.out.println("yes");
+			return "Y";
+		}
+		
+		else {
+			//System.out.println("no");
+			return "N";
+		}
+	}
 }

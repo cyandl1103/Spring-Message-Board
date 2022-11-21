@@ -70,6 +70,11 @@ html, body {
 	
 }
 
+.body-board {
+	margin-bottom: 7rem;
+	
+}
+
 .footer-text {
 	float: right;
 	color: #ffffff55;
@@ -145,7 +150,7 @@ a{
  
  .active {
  	color: #343a40 !important;
-    //font-weight: bold;
+/*     font-weight: bold; */
     pointer-events: none;
  }
  
@@ -153,3 +158,32 @@ a{
  	margin-bottom: 2rem;
  
  }
+ 
+ .reply-title {
+ 	border-top: none !important; 
+ 	font-size: larger;
+ 	padding-bottom: 1rem !important;
+ }
+ 
+ .little{
+ 	padding: 0.1rem 0.3rem;
+ 	background: #aaaaaa;
+ 	border-color: #aaaaaa;
+ 	margin: 0 0.3rem;
+ }
+ 
+ .little:hover {
+	background: #999999;
+	border-color: #999999;
+}
+
+ .little:active {
+	background: #999999;
+	border-color: #999999;
+}
+
+.little:focus {
+	background: #999999;
+	border-color: #999999;
+	box-shadow: 0 0 0 0.2rem rgb(0 0 0 / 50%);
+}

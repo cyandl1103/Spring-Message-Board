@@ -5,6 +5,7 @@ import java.util.List;
 import com.board.domain.BoardDTO;
 import com.board.domain.Criteria;
 import com.board.domain.CriteriaSearch;
+import com.board.domain.ReplyDTO;
 
 public interface BoardService {
 	
@@ -20,4 +21,7 @@ public interface BoardService {
 	public int getTotal(String subject);
 	
 	public List<BoardDTO> getSearchPaging(CriteriaSearch criSearch) throws Exception;
+	
+	public int register(ReplyDTO dto) throws Exception;
+	public List<ReplyDTO> replyList(int bseq) throws Exception;
 }

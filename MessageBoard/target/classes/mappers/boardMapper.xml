@@ -6,29 +6,26 @@
 	<!-- SQL의 모든 쿼리들을 작성함 -->
 	<!-- 모든 게시글 조회하기 -->
 	<select id="list" resultType="com.board.domain.BoardDTO">
-		select
-			seq, subject, content, name, reg_date, readCount
-		from
-			board;
+		select seq, subject, content, name, reg_date, readCount
+		from board;
 	</select>
 	
 	<!-- 현재 가장 큰 seq(번호) 가져오기 -->
 	<select id="maxSeq" resultType="java.lang.Integer">
-		select
-			max(seq)
-		from
-			board;
+		select max(seq)
+		from board;
 	</select>
 	
 	<!-- 게시글 삽입 -->
 	<insert id="register">
-		insert into
-			board(
-				seq, subject, content, name, reg_date, readCount
-			)
-			values(
-				#{seq}, #{subject}, #{content}, #{name}, #{reg_date},0
-			);
+		insert into board(seq, subject, content, name, reg_date, readCount)
+		values (#{seq}, #{subject}, #{content}, #{name}, #{reg_date},0);
+	</insert>
+	
+	<!-- 댓글 삽입 -->
+	<insert id="replyRegister">
+		insert into board_reply (bseq, content, name, reg_date)
+		values (#{bseq}, #{content}, #{name}, #{reg_date});
 	</insert>
 	
 	<!-- 조회수 증가 -->
@@ -115,6 +112,26 @@
 		order by seq desc
 		limit #{skip},#{amount};
 <!-- 			subject like #{subject}; -->
+	</select>
+	
+	<!-- 검색어 추천 - 중복 제거 -->
+	<select id="recommendSearch" resultType="com.board.domain.BoardDTO">
+		select distinct subject
+		from board
+		where subject like CONCAT('%',#{subject},'%')
+		order by 
+		    case when subject = #{subject} then 0
+		    when subject like CONCAT(#{subject},'%') then 1
+		    when subject like CONCAT('%',#{subject},'%') then 2
+		    when subject like CONCAT('%',#{subject}) then 3
+		    else 4 end;
+		;
+	</select>
+	
+	<select id="replyList" resultType="com.board.domain.ReplyDTO">
+		select rseq, bseq, name, content, reg_date, re_step, re_level
+		from board_reply
+		where bseq = #{bseq};
 	</select>
 
 </mapper>

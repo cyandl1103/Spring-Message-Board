@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
+    <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,28 +32,32 @@
 		<div class="body-container">
 			<div class="frm-title">글쓰기</div>
 			
-			<form id="regForm" method="post">
-			<table class="table">
-				<tr>
-					<th scope="row">제목</th>
-					<td><input class="form-control mr-sm-2" type="text" placeholder="" id="subject" name="subject"></td>
-				</tr>
-				<tr>
-					<th scope="row">작성자</th>
-					<td><input class="form-control mr-sm-2" type="text" placeholder="" id="name" name="name"></td>
-				</tr>
-				<tr>
-					<th scope="row">내용</th>
-					<td><textarea class="form-control mr-sm-2" type="text" placeholder="" id="content" name="content" maxlength="1000" rows="8"></textarea></td>
-				</tr>
-				<tr>
-					<td colspan="2" style="padding-top: 20px;">
-						<button class="btn btn-primary" type="button" onclick='location.href="/board/list"'>취소</button>
-						<button class="btn btn-primary" type="button" onclick="fn_boardRegister();"  style="float: right;"> 등록 </button>
-					</td>
-				</tr>
-			</table>
-			</form>
+			<form:form id="regForm" method="post" enctype="multipart/form-data" modelAttribute="uploadFile" action="upload">
+				<table class="table">
+					<tr>
+						<th scope="row">제목</th>
+						<td><input class="form-control mr-sm-2" type="text" placeholder="" id="subject" name="subject" maxlength="200"></td>
+					</tr>
+					<tr>
+						<th scope="row">작성자</th>
+						<td><input class="form-control mr-sm-2" type="text" placeholder="" id="name" name="name" maxlength="20"></td>
+					</tr>
+					<tr>
+						<th scope="row">내용</th>
+						<td><textarea class="form-control mr-sm-2" type="text" placeholder="" id="content" name="content" maxlength="1000" rows="8"></textarea></td>
+					</tr>
+					<tr>
+						<th scope="row">파일</th>
+						<td><input class="form-control mr-sm-2" type="file" id="file" name="file"></td>
+					</tr>
+					<tr>
+						<td colspan="2" style="padding-top: 20px;">
+							<button class="btn btn-primary" type="button" onclick='location.href="/board/list"'>취소</button>
+							<button class="btn btn-primary" type="button" onclick="fn_boardRegister();"  style="float: right;"> 등록 </button>
+						</td>
+					</tr>
+				</table>
+			</form:form>
 		</div>
 		
 		<div class="board-footer bg-dark">

@@ -22,4 +22,7 @@ public interface BoardDAO {
 	public int getTotal(String subject);
 	
 	public List<BoardDTO> getSearchPaging(CriteriaSearch criSearch) throws Exception;
+	public int register(ReplyDTO dto);
+	
+	public List<ReplyDTO> replyList(int bseq) throws Exception;
 }

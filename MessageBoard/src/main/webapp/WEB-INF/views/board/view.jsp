@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -28,28 +30,85 @@
 			</nav>
 		</div>
 		<div class="body-container">
-			<div class="frm-title">${view.subject}</div>
-			<form id = "frm" method="post">
-				<input type="hidden" value="${view.seq}" name="seq" id="seq">
-				<table class="table">
-					<tr>
-						<th scope="row">작성자</th>
-						<td> ${view.name}</td>
-					</tr>
-					<tr>
-						<th scope="row" width="90px" >내용</th>
-						<td style="word-break:break-all">${view.content}</td>
-					</tr>
-					<tr>
-						<td colspan="3" style="padding-top: 20px;">
-							<button class="btn btn-primary" type="button" onclick='location.href="/board/list"'>목록</button>
-							<button class="btn btn-primary" type="button" onclick='fn_goUpdateView(${view.seq})'>수정</button>
-							<button class="btn btn-primary" type="button" onclick='fn_boardDelete(${view.seq})'>삭제</button>
-						</td>
-					</tr>
+			<div class="body-board">
+				<div class="frm-title">${view.subject}</div>
+				<form id = "frm" method="post">
+					<input type="hidden" value="${view.seq}" name="seq" id="seq">
+					<table class="table">
+						<tr>
+							<th scope="row">작성자</th>
+							<td> ${view.name}</td>
+						</tr>
+						<tr>
+							<th scope="row" width="90px" >내용</th>
+							<td style="word-break:break-all">${view.content}</td>
+						</tr>
+						<tr>
+							<td colspan="3" style="padding-top: 20px;">
+								<button class="btn btn-primary" type="button" onclick='location.href="/board/list"'>목록</button>
+								<button class="btn btn-primary" type="button" onclick='fn_goUpdateView(${view.seq})'>수정</button>
+								<button class="btn btn-primary" type="button" onclick='fn_boardDelete(${view.seq})'>삭제</button>
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+			
+			<div class="body-regReply">
+				<form id="replyFrm" method="post">
+					<table class="table">
+						<tr><th scope="row" class="reply-title">댓글 작성</th></tr>
+						<tr>
+							<td><input class="form-control mr-sm-2" type="text" placeholder="이름" id="name" name="name" maxlength="20" ></td>
+						</tr>
+						<tr>
+							<td style="border: none; padding-top:0.1rem"><textarea class="form-control mr-sm-2" type="text" placeholder="내용을 입력해주세요." id="content" name="content" maxlength="100" rows="3"></textarea></td>
+						</tr>
+						<tr>
+							<td colspan="3" style="border: none;">
+								<button class="btn btn-primary" type="button" onclick="fn_replyRegister();" style="float: right;">등록</button>
+							</td>
+						</tr>
+					</table>
+					<input type="hidden" name="bseq" id="bseq" value="${view.seq}"/>
+				</form>
+			</div>
+			
+			<div class="body-reply">
+
+				<table class="table" id="listTable">
+					<thead class="table table-hover">
+						<tr><th scope="row" class="reply-title" colspan="4">댓글</th></tr>
+					</thead>
+					<c:forEach items="${list}" var="list">
+						<input type="hidden" value="${list.rseq}" name="rseq" id="rseq">
+						<input type="hidden" value="${list.re_step}" name="re_step" id="re_step">
+						<input type="hidden" value="${list.re_level}" name="re_level" id="re_level">
+						<tbody>
+							<tr align="left">
+								<td style="font-weight: bold;"> ${list.name} </td>
+								<fmt:parseDate value="${list.reg_date}" var="dateValue" pattern="yyyyMMddHHmmss"/>
+								<td style="color:#999999;" align="right"> <fmt:formatDate value="${dateValue}" pattern="yyyy-MM-dd"/></td>
+								<td style="width: 130px;">
+									<button class="btn btn-primary little" type="button" onclick='fn_replyReplyView(${list.rseq},${list.re_step},${list.re_level});' id="replyReplyView">답글</button>
+									<button class="btn btn-primary little" type="button" onclick='fn_replyDelete();' >삭제</button>
+								</td>
+							</tr>
+							<tr align="left">
+								<td style="word-break:break-all; height:100px; border: none; vertical-align: top;" colspan="4" > ${list.content} </td>
+							</tr>
+						</tbody>
+<!-- 						<form id="replyListFrm"> -->
+						<tbody id="addReply_${list.rseq}_${list.re_step}_${list.re_level}"></tbody>
+<!-- 						</form> -->
+					</c:forEach>
+			
 				</table>
 			</form>
+			
+			</div>
 		</div>
+		
 		<div class="board-footer bg-dark">
 			<div class="footer-text">
 				Made with Spring Framework

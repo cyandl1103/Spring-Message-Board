@@ -43,7 +43,7 @@
 			str += '<td class="body-content">' + name + '</td>';
 			str += '<td>' + dateFormatted + '</td>';	
 			str += '<td>' + readCount + '</td>';
-			str += "</tr>"
+			str += '</tr>';
 		}
 		// 테이블에 추가 - str가 밀어버린 tbody 밑에 들어가게 됨
 		$('#listTable').append(str);
