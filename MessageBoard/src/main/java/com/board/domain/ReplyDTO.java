@@ -9,6 +9,7 @@ public class ReplyDTO {
 	String name; // 댓글 작성자
 	String reg_date; // 댓글 등록일
 	
+	Integer rep;	// 부모 번호
 	Integer re_step; // 대댓글 순서
 	Integer re_level; // 들여쓰기 수
 	
@@ -29,8 +30,8 @@ public class ReplyDTO {
 	public Integer getRseq() {
 		return rseq;
 	}
-	public void setRseq(Integer resq) {
-		this.rseq = resq;
+	public void setRseq(Integer rseq) {
+		this.rseq = rseq;
 	}
 	public String getContent() {
 		return content;
@@ -63,6 +64,13 @@ public class ReplyDTO {
 	public void setRe_level(Integer re_level) {
 		this.re_level = re_level;
 	}
+	public Integer getRep() {
+		return rep;
+	}
+	public void setRep(Integer rep) {
+		this.rep = rep;
+	}
+
 	
 	
 	

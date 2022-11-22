@@ -1,6 +1,8 @@
 package com.board.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -31,6 +33,16 @@ public class BoardDAOImpl implements BoardDAO {
 	@Override
 	public Integer getMaxSeq() {
 		return sqlSession.selectOne(namespace + ".maxSeq");
+	}
+	
+	@Override
+	public Integer getRMaxSeq() {
+		return sqlSession.selectOne(namespace + ".maxRSeq");
+	}
+	
+	@Override
+	public Integer getMaxRe_step(int rep) {
+		return sqlSession.selectOne(namespace + ".maxReStep", rep);
 	}
 	
 	@Override
@@ -91,5 +103,19 @@ public class BoardDAOImpl implements BoardDAO {
 	@Override
 	public List<ReplyDTO> replyList(int bseq) throws Exception {
 		return sqlSession.selectList(namespace + ".replyList", bseq);
+	}
+	
+	@Override
+	public void updateRe_step(int rep, int re_step) {
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		map.put("rep", rep);
+		map.put("re_step", re_step);
+		sqlSession.update(namespace + ".updateReStep", map);
+		
+	}
+	
+	@Override
+	public Integer getMaxRe_levelStep(Map<String, Integer> map) {
+		return sqlSession.selectOne(namespace + ".maxReLevelStep", map);
 	}
 }

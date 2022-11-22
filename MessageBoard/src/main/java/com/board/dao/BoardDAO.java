@@ -1,5 +1,6 @@
 package com.board.dao;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
@@ -25,4 +26,9 @@ public interface BoardDAO {
 	public int register(ReplyDTO dto);
 	
 	public List<ReplyDTO> replyList(int bseq) throws Exception;
+	public Integer getRMaxSeq();
+	public Integer getMaxRe_step(int rep);
+	public Integer getMaxRe_levelStep(Map<String, Integer> map);
+	
+	public void updateRe_step(int rep, int re_step);
 }

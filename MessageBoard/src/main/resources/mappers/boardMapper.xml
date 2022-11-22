@@ -10,10 +10,31 @@
 		from board;
 	</select>
 	
-	<!-- 현재 가장 큰 seq(번호) 가져오기 -->
+	<!-- 현재 가장 큰 게시물 seq(번호) 가져오기 -->
 	<select id="maxSeq" resultType="java.lang.Integer">
 		select max(seq)
 		from board;
+	</select>
+	
+	<!-- 현재 가장 큰 댓글 rseq(번호) 가져오기 -->
+	<select id="maxRSeq" resultType="java.lang.Integer">
+		select max(rseq)
+		from board_reply;
+	</select>
+	
+	<!-- rep, re_level의 현재 가장 큰 re_step -->
+	<select id="maxReStep" resultType="java.lang.Integer">
+		select max(re_step)
+		from board_reply
+		where rep = #{rep};
+	</select>
+	
+	<!-- 대댓글 밑에 댓글 추가할 때 기존 댓글 밑에 추가하기 위해 -->
+	<!-- 해당 rseq, re_level의 최대 re_step 값 구함 -->
+	<select id="maxReLevelStep" resultType="java.lang.Integer" parameterType="Map">
+		select max(re_step)
+		from board_reply
+		where rep = #{rep} and re_level = #{re_level};
 	</select>
 	
 	<!-- 게시글 삽입 -->
@@ -24,47 +45,43 @@
 	
 	<!-- 댓글 삽입 -->
 	<insert id="replyRegister">
-		insert into board_reply (bseq, content, name, reg_date)
-		values (#{bseq}, #{content}, #{name}, #{reg_date});
+		insert into board_reply (rseq, bseq, content, name, rep,  reg_date, re_step, re_level)
+		values (#{rseq}, #{bseq}, #{content}, #{name}, #{rep}, #{reg_date}, #{re_step}, #{re_level});
 	</insert>
 	
 	<!-- 조회수 증가 -->
 	<update id="updateReadCount">
-		update
-			board
-		set
-			readcount = readcount + 1
-		where
-			seq = #{seq};
+		update board
+		set readcount = readcount + 1
+		where seq = #{seq};
 	</update>
+	
+	<!-- re_step 재설정 -->
+	<update id="updateReStep" parameterType="map">
+		update board_reply
+		set re_step = re_step + 1
+		where rep = #{rep} and re_step >= #{re_step};
+	</update>
+	
 	
 	<!-- 게시물 조회 -->
 	<select id="view" resultType="com.board.domain.BoardDTO">
-		select
-			seq, subject, content, name, reg_date, readCount
-		from
-			board
-		where
-			seq = #{seq};
+		select seq, subject, content, name, reg_date, readCount
+		from board
+		where seq = #{seq};
 	</select>
 	
 	<!-- 게시물 삭제 -->
 	<delete id="delete">
-		delete from
-			board
-		where
-			seq = #{seq};
+		delete from board
+		where seq = #{seq};
 	</delete>
 	
 	<!-- 게시물 삭제 -->
 	<update id="update">
-		update
-			board
-		set
-			subject = #{subject}, 
-			content = #{content}
-		where
-			seq = #{seq};
+		update board
+		set subject = #{subject}, content = #{content}
+		where seq = #{seq};
 	</update>
 	
 	<!-- 제목 기준으로 게시물 검색 -->
@@ -129,9 +146,10 @@
 	</select>
 	
 	<select id="replyList" resultType="com.board.domain.ReplyDTO">
-		select rseq, bseq, name, content, reg_date, re_step, re_level
+		select rseq, bseq, name, content, rep, reg_date, re_step, re_level
 		from board_reply
-		where bseq = #{bseq};
+		where bseq = #{bseq}
+		order by rep, re_step;
 	</select>
 
 </mapper>

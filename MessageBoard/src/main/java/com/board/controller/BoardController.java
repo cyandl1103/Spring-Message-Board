@@ -97,7 +97,25 @@ public class BoardController {
 		
 	}
 	
-	
+	// 댓글 등록
+	@ResponseBody
+	@RequestMapping(value = "/reply/register", method = RequestMethod.POST)
+	public String replyRegister(Locale locale, Model model, ReplyDTO dto) throws Exception {
+		// 현재 시간
+		Date date = new Date(System.currentTimeMillis());
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+		dto.setReg_date(format.format(date));
+		
+		if(service.register(dto) == 1) {
+			return "Y";
+		}
+		
+		else {
+			return "N";
+		}
+	}
+
+
 	@ResponseBody
 	@RequestMapping(value = "/delete", method = RequestMethod.POST)
 	public String delete(Locale locale, Model model, HttpServletRequest request) throws Exception {
@@ -198,11 +216,9 @@ public class BoardController {
 		return resultString;
 	}
 	
-	
-	
 	  
-	  @RequestMapping(value = "/list", method = RequestMethod.GET) 
-	  public String list(Locale Locale, Criteria cri, Model model) throws Exception {
+	@RequestMapping(value = "/list", method = RequestMethod.GET) 
+	public String list(Locale Locale, Criteria cri, Model model) throws Exception {
 		  List<BoardDTO> list = service.getListPaging(cri); //
 		  //model.addAttribute(view에서의 변수 이름, controller에서의 변수 이름) // 매핑해서 view 부분으로 넘김
 		  model.addAttribute("list", list);
@@ -212,7 +228,7 @@ public class BoardController {
 		  PageMakerDTO pageMake = new PageMakerDTO(cri,total); 
 		  model.addAttribute("pageMaker", pageMake);
 		  return "/board/list"; 
-	  }
+	 }
 	 
 	
 	@ResponseBody
@@ -259,24 +275,5 @@ public class BoardController {
 		return resultString;
 	}
 	
-	
-	// 댓글 등록
-	@ResponseBody
-	@RequestMapping(value = "/reply/register", method = RequestMethod.POST)
-	public String replyRegister(Locale locale, Model model, ReplyDTO dto) throws Exception {
-		// 현재 시간
-		Date date = new Date(System.currentTimeMillis());
-		SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
-		dto.setReg_date(format.format(date));
-		
-		if(service.register(dto) == 1) {
-			//System.out.println("yes");
-			return "Y";
-		}
-		
-		else {
-			//System.out.println("no");
-			return "N";
-		}
-	}
-}
+}	
+

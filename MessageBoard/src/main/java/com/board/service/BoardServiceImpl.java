@@ -1,6 +1,9 @@
 package com.board.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 import com.board.dao.BoardDAO;
@@ -38,6 +41,46 @@ public class BoardServiceImpl implements BoardService {
 	
 	@Override
 	public int register(ReplyDTO dto) throws Exception {
+		// 새로운 댓글일 시 새로운 rseq, rep 부여
+		if (dto.getRep() == null) {
+			Integer rmax = dao.getRMaxSeq();
+			if(rmax == null) { 
+				dto.setRseq(1);
+				dto.setRep(1);
+			}
+			// 게시글 있을 때
+			else {
+				// 가장 큰 rseq에서 1을 더한 값을 새 게시글 rseq에 부여
+				dto.setRseq(rmax + 1);
+				dto.setRep(rmax + 1);
+			}
+		}
+		
+		// 대댓글 일 때 새로운 rseq만 부여
+		else {
+			Integer rmax = dao.getRMaxSeq();
+			if(rmax == null) { 
+				dto.setRseq(1);
+			}
+			// 게시글 있을 때
+			else {
+				// 가장 큰 rseq에서 1을 더한 값을 새 게시글 rseq에 부여
+				dto.setRseq(rmax + 1);
+			}
+			
+		}
+		
+		// 새 댓글일 때 re_level은 null이므로 0으로 설정
+		if (dto.getRe_level() == null) dto.setRe_level(0);
+
+		
+		// re_step 구함
+		// 대댓글이 없어 re_step이 null일 경우 re_step을 0으로 설정
+		if (dao.getMaxRe_step(dto.getRep()) == null) dto.setRe_step(0);
+		
+		// 대댓글 있는 경우 
+		else dao.updateRe_step(dto.getRep(), dto.getRe_step());
+
 		return dao.register(dto);
 	}
 	

@@ -159,20 +159,76 @@ function fn_replyRegister(){
 };
 
 
-function fn_replyReplyView(rseq, re_step, re_level){
+function fn_replyReplyRegister(rep, re_level, re_step){
 
-		console.log(rseq + "  " + re_step + "  " + re_level);
+	var bseq = $("#bseq").val();
+	var name = $("#repName_" + rep + "_" + re_level + "_" + re_step).val();
+	var content = $("#repContent_" + rep + "_" + re_level+ "_" + re_step).val();
+	console.log("bseq : " + bseq + "	name : " + name + "	  content : " + content);
+	
+	// 제목이 없을 경우 알림 띄우고 게시글 등록하지 않음
+	if(!content || !name){
+		alert("이름과 내용을 입력해주세요!");
+		return;
+	}
 
-		var str = "";
-		// 대댓글 작성
-		$("#addReply_"+ rseq + "_" + re_step + "_" + re_level).empty();
+	
+	$.ajax({
+		type : "POST",
+		url : "/board/reply/register",
+		data : {
+			"bseq" : bseq,
+			"name" : name, 
+			"content" : content,
+			"rep" : rep,
+			"re_level" : re_level,
+			"re_step" : re_step
+		},
+	
+		success: function(data){
+			if(data == "Y"){
+				alert("댓글을 등록하였습니다.");
+				fn_goView(bseq);		
+			}
+		},
+		
+		error: function(data){
+			alert("댓글을 등록하는데 실패했습니다.");
+			console.log("data : ' " + data + " '");
+		}
+	});
+};
 
-		str += '<tr><td colspan="3"><input class="form-control mr-sm-2" type="text" placeholder="이름" id="repName" name="repName" maxlength="20" ></td></tr>';
-		str += '<tr><td colspan="3" style="border: none; padding-top:0.1rem"><textarea class="form-control mr-sm-2" type="text" placeholder="내용을 입력해주세요." id="repContent" name="repContent" maxlength="100" rows="3"></textarea></td></tr>';
-		str += '<tr><td colspan="3" style="border: none;"><button class="btn btn-primary" type="button" onclick="fn_replyRegister();" style="float: right;">등록</button></td></tr>';
-		str += '<input type="hidden" name="bseq" id="bseq" value="' + $("#bseq").val(); + '"/>';
 
-		$("#addReply_"+ rseq + "_" + re_step + "_" + re_level).append(str);
+function fn_replyReplyView(rep, re_level, re_step){
+
+	var new_re_step = re_step
+	// for(let i = 1; i<20 ; i++){
+	// 	if($("#addReply_"+ rep + "_" + re_level+1 + "_" + (i+1)).length > 0){
+	// 		continue;
+	// 	}
+	// 	else{
+	// 		new_re_step = i;
+	// 		break;
+	// 	}
+	// }
+
+	var str = "";
+	// 대댓글 작성
+	$("#addReply_"+ rep + "_" + re_level + "_" + re_step).empty();
+
+	re_level++;
+	re_step++;
+
+	// rep 값과 다음 re_level, re_step 설정해줌
+	str += '<tr><td colspan="3"><input class="form-control mr-sm-2" type="text" placeholder="이름" id="repName_'+ rep + "_" + re_level + "_" + re_step +'" name="repName" maxlength="20" ></td></tr>';
+	str += '<tr><td colspan="3" style="border: none; padding-top:0.1rem"><textarea class="form-control mr-sm-2" type="text" placeholder="내용을 입력해주세요." id="repContent_' + rep + "_" + re_level + "_" + re_step + '" name="repContent" maxlength="100" rows="3"></textarea></td></tr>';
+	str += '<tr><td colspan="3" style="border: none;"><button class="btn btn-primary" type="button" onclick="fn_replyReplyRegister(' + rep + "," + re_level + ','+ re_step +');" style="float: right;">등록</button></td></tr>';
+
+	re_level--;
+	re_step--;
+
+	$("#addReply_"+ rep + "_" + re_level + "_" + re_step).append(str);
 
 };
 

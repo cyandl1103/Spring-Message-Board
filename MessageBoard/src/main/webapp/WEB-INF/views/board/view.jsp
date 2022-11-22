@@ -82,29 +82,35 @@
 					</thead>
 					<c:forEach items="${list}" var="list">
 						<input type="hidden" value="${list.rseq}" name="rseq" id="rseq">
-						<input type="hidden" value="${list.re_step}" name="re_step" id="re_step">
 						<input type="hidden" value="${list.re_level}" name="re_level" id="re_level">
+						<input type="hidden" value="${list.re_step}" name="re_step" id="re_step">
 						<tbody>
 							<tr align="left">
-								<td style="font-weight: bold;"> ${list.name} </td>
+								<td style="font-weight: bold;">
+									<c:forEach begin="1" end="${list.re_level}" > &nbsp&nbsp&nbsp&nbsp </c:forEach>
+									${list.name}
+								
+								</td>
 								<fmt:parseDate value="${list.reg_date}" var="dateValue" pattern="yyyyMMddHHmmss"/>
 								<td style="color:#999999;" align="right"> <fmt:formatDate value="${dateValue}" pattern="yyyy-MM-dd"/></td>
 								<td style="width: 130px;">
-									<button class="btn btn-primary little" type="button" onclick='fn_replyReplyView(${list.rseq},${list.re_step},${list.re_level});' id="replyReplyView">답글</button>
+									<button class="btn btn-primary little" type="button" onclick='fn_replyReplyView(${list.rep},${list.re_level},${list.re_step});' id="replyReplyView">답글</button>
 									<button class="btn btn-primary little" type="button" onclick='fn_replyDelete();' >삭제</button>
 								</td>
 							</tr>
 							<tr align="left">
-								<td style="word-break:break-all; height:100px; border: none; vertical-align: top;" colspan="4" > ${list.content} </td>
+								<td style="word-break:break-all; height:100px; border: none; vertical-align: top;" colspan="4" >
+								 	<c:forEach begin="1" end="${list.re_level}" > &nbsp&nbsp&nbsp&nbsp </c:forEach>
+								 	${list.content} 
+								</td>
 							</tr>
 						</tbody>
-<!-- 						<form id="replyListFrm"> -->
-						<tbody id="addReply_${list.rseq}_${list.re_step}_${list.re_level}"></tbody>
-<!-- 						</form> -->
+
+						<tbody id="addReply_${list.rep}_${list.re_level}_${list.re_step}"></tbody>
+
 					</c:forEach>
 			
 				</table>
-			</form>
 			
 			</div>
 		</div>
