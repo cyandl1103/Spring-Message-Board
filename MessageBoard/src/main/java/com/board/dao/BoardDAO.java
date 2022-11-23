@@ -31,4 +31,11 @@ public interface BoardDAO {
 	public Integer getMaxRe_levelStep(Map<String, Integer> map);
 	
 	public void updateRe_step(int rep, int re_step);
+	
+	
+	public Integer getParentRep(Integer parent_rseq);
+	public Integer getParentRe_level(Integer parent_rseq);
+	public Integer getMaxParentRe_step(Integer parent_rseq);
+	public void updateParentChild(Integer parent_rseq);
+	public Integer getParentRe_step(Integer parent_rseq);
 }

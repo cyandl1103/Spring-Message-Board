@@ -13,6 +13,9 @@ public class ReplyDTO {
 	Integer re_step; // ´ë´ñ±Û ¼ø¼­
 	Integer re_level; // µé¿©¾²±â ¼ö
 	
+	Integer parent_rseq; // ºÎ¸ğÀÇ rseq
+	Integer child; // ÀÚ½ÄÀÇ ¼ö
+	
 	/*
 	´ñ±Û´ñ±Û´ñ±Û 			rseq = 1, re_step = 0, re_level = 0
 		¤¤ ´ñ±Û´ñ±Û´ñ±Û		rseq = 1, re_step = 1, re_level = 1
@@ -69,6 +72,18 @@ public class ReplyDTO {
 	}
 	public void setRep(Integer rep) {
 		this.rep = rep;
+	}
+	public Integer getParent_rseq() {
+		return parent_rseq;
+	}
+	public void setParent_rseq(Integer parent_rseq) {
+		this.parent_rseq = parent_rseq;
+	}
+	public Integer getChild() {
+		return child;
+	}
+	public void setChild(Integer child) {
+		this.child = child;
 	}
 
 	

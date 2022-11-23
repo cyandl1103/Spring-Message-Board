@@ -45,9 +45,40 @@
 	
 	<!-- 댓글 삽입 -->
 	<insert id="replyRegister">
-		insert into board_reply (rseq, bseq, content, name, rep,  reg_date, re_step, re_level)
-		values (#{rseq}, #{bseq}, #{content}, #{name}, #{rep}, #{reg_date}, #{re_step}, #{re_level});
+		insert into board_reply (rseq, bseq, content, name, rep,  reg_date, re_step, re_level, parent_rseq, child)
+		values (#{rseq}, #{bseq}, #{content}, #{name}, #{rep}, #{reg_date}, #{re_step}, #{re_level}, #{parent_rseq}, #{child});
 	</insert>
+	
+	
+	<select id="ParentRep" resultType="java.lang.Integer">
+		select rep
+		from board_reply
+		where rseq = #{parent_rseq};
+	</select>
+	
+	<select id="ParentReLevel" resultType="java.lang.Integer">
+		select re_level
+		from board_reply
+		where rseq = #{parent_rseq};
+	</select>
+	
+	<select id="MaxParentReStep" resultType="java.lang.Integer">
+		select max(re_step)
+		from board_reply
+		where parent_rseq = #{parent_rseq};
+	</select>
+	
+	<select id="ParentReStep" resultType="java.lang.Integer">
+		select re_step
+		from board_reply
+		where rseq = #{parent_rseq};
+	</select>
+	
+	<update id="updateParentChild">
+		update board_reply
+		set child = child + 1
+		where rseq = #{parent_rseq};
+	</update>
 	
 	<!-- 조회수 증가 -->
 	<update id="updateReadCount">

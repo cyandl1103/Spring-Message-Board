@@ -118,4 +118,27 @@ public class BoardDAOImpl implements BoardDAO {
 	public Integer getMaxRe_levelStep(Map<String, Integer> map) {
 		return sqlSession.selectOne(namespace + ".maxReLevelStep", map);
 	}
+	
+	
+	@Override
+	public Integer getParentRep(Integer parent_rseq) {
+		return sqlSession.selectOne(namespace + ".ParentRep", parent_rseq);
+	}
+	@Override
+	public Integer getParentRe_level(Integer parent_rseq) {
+		return sqlSession.selectOne(namespace + ".ParentReLevel", parent_rseq);
+	}
+	@Override
+	public Integer getMaxParentRe_step(Integer parent_rseq) {
+		return sqlSession.selectOne(namespace + ".MaxParentReStep", parent_rseq);
+	}
+	@Override
+	public void updateParentChild(Integer parent_rseq) {
+		sqlSession.update(namespace + ".updateParentChild", parent_rseq);
+		
+	}
+	@Override
+	public Integer getParentRe_step(Integer parent_rseq) {
+		return sqlSession.selectOne(namespace + ".ParentReStep", parent_rseq);
+	}
 }

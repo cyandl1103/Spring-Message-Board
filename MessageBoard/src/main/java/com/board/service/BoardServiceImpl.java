@@ -41,46 +41,51 @@ public class BoardServiceImpl implements BoardService {
 	
 	@Override
 	public int register(ReplyDTO dto) throws Exception {
-		// 새로운 댓글일 시 새로운 rseq, rep 부여
-		if (dto.getRep() == null) {
+		
+		// 부모 존재할 때 => 대댓글일 때
+		if(dto.getParent_rseq() != null) {
+			dto.setRep(dao.getParentRep(dto.getParent_rseq())); // 부모의 rep과 동일하게 설정
+			dto.setRe_level(dao.getParentRe_level(dto.getParent_rseq()) + 1); // 부모의 re_level보다 1 크게 설정
+			
+			// 부모에 대댓글이 존재할 때
+			if(dao.getMaxParentRe_step(dto.getParent_rseq()) != null)
+				dto.setRe_step(dao.getMaxParentRe_step(dto.getParent_rseq()) + 1); // 부모의 자식 중 가장 큰 re_step보다 1 크게 설정
+			// 부모에 대댓글이 존재하지 않을 때
+			else
+				dto.setRe_step(dao.getParentRe_step(dto.getParent_rseq()) + 1); // 부모의 re_step보다 1 크게 설정
+			
+			dto.setChild(0); // 새 댓글이므로 자식은 0개로 설정
+			dao.updateParentChild(dto.getParent_rseq()); // 부모의 자식 수 1 증가
+			dao.updateRe_step(dto.getRep(), dto.getRe_step()); // 뒷번호의 re_step들 1씩 증가 시킴
+			
+			// 대댓글의 rseq 부여
 			Integer rmax = dao.getRMaxSeq();
+			dto.setRseq(rmax + 1);
+		}
+		// 댓글일 때
+		else {
+			// 새로운 댓글일 시 새로운 rseq, rep 부여
+			Integer rmax = dao.getRMaxSeq();
+			// 댓글이 하나도 없을 때
 			if(rmax == null) { 
 				dto.setRseq(1);
 				dto.setRep(1);
 			}
-			// 게시글 있을 때
+			// 댓글이 있을 때
 			else {
 				// 가장 큰 rseq에서 1을 더한 값을 새 게시글 rseq에 부여
 				dto.setRseq(rmax + 1);
 				dto.setRep(rmax + 1);
 			}
+
+			// 초기화
+			dto.setRe_level(0);
+			dto.setRe_step(0); 
+			dto.setParent_rseq(0); 
+			dto.setChild(0);
 		}
 		
-		// 대댓글 일 때 새로운 rseq만 부여
-		else {
-			Integer rmax = dao.getRMaxSeq();
-			if(rmax == null) { 
-				dto.setRseq(1);
-			}
-			// 게시글 있을 때
-			else {
-				// 가장 큰 rseq에서 1을 더한 값을 새 게시글 rseq에 부여
-				dto.setRseq(rmax + 1);
-			}
-			
-		}
-		
-		// 새 댓글일 때 re_level은 null이므로 0으로 설정
-		if (dto.getRe_level() == null) dto.setRe_level(0);
-
-		
-		// re_step 구함
-		// 대댓글이 없어 re_step이 null일 경우 re_step을 0으로 설정
-		if (dao.getMaxRe_step(dto.getRep()) == null) dto.setRe_step(0);
-		
-		// 대댓글 있는 경우 
-		else dao.updateRe_step(dto.getRep(), dto.getRe_step());
-
+		// insert
 		return dao.register(dto);
 	}
 	
