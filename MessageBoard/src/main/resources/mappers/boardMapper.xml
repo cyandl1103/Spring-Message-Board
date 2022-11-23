@@ -16,82 +16,19 @@
 		from board;
 	</select>
 	
-	<!-- 현재 가장 큰 댓글 rseq(번호) 가져오기 -->
-	<select id="maxRSeq" resultType="java.lang.Integer">
-		select max(rseq)
-		from board_reply;
-	</select>
-	
-	<!-- rep, re_level의 현재 가장 큰 re_step -->
-	<select id="maxReStep" resultType="java.lang.Integer">
-		select max(re_step)
-		from board_reply
-		where rep = #{rep};
-	</select>
-	
-	<!-- 대댓글 밑에 댓글 추가할 때 기존 댓글 밑에 추가하기 위해 -->
-	<!-- 해당 rseq, re_level의 최대 re_step 값 구함 -->
-	<select id="maxReLevelStep" resultType="java.lang.Integer" parameterType="Map">
-		select max(re_step)
-		from board_reply
-		where rep = #{rep} and re_level = #{re_level};
-	</select>
-	
+
 	<!-- 게시글 삽입 -->
 	<insert id="register">
 		insert into board(seq, subject, content, name, reg_date, readCount)
 		values (#{seq}, #{subject}, #{content}, #{name}, #{reg_date},0);
 	</insert>
 	
-	<!-- 댓글 삽입 -->
-	<insert id="replyRegister">
-		insert into board_reply (rseq, bseq, content, name, rep,  reg_date, re_step, re_level, parent_rseq, child)
-		values (#{rseq}, #{bseq}, #{content}, #{name}, #{rep}, #{reg_date}, #{re_step}, #{re_level}, #{parent_rseq}, #{child});
-	</insert>
-	
-	
-	<select id="ParentRep" resultType="java.lang.Integer">
-		select rep
-		from board_reply
-		where rseq = #{parent_rseq};
-	</select>
-	
-	<select id="ParentReLevel" resultType="java.lang.Integer">
-		select re_level
-		from board_reply
-		where rseq = #{parent_rseq};
-	</select>
-	
-	<select id="MaxParentReStep" resultType="java.lang.Integer">
-		select max(re_step)
-		from board_reply
-		where parent_rseq = #{parent_rseq};
-	</select>
-	
-	<select id="ParentReStep" resultType="java.lang.Integer">
-		select re_step
-		from board_reply
-		where rseq = #{parent_rseq};
-	</select>
-	
-	<update id="updateParentChild">
-		update board_reply
-		set child = child + 1
-		where rseq = #{parent_rseq};
-	</update>
-	
+
 	<!-- 조회수 증가 -->
 	<update id="updateReadCount">
 		update board
 		set readcount = readcount + 1
 		where seq = #{seq};
-	</update>
-	
-	<!-- re_step 재설정 -->
-	<update id="updateReStep" parameterType="map">
-		update board_reply
-		set re_step = re_step + 1
-		where rep = #{rep} and re_step >= #{re_step};
 	</update>
 	
 	
@@ -159,7 +96,6 @@
 		where subject like CONCAT('%',#{subject},'%')
 		order by seq desc
 		limit #{skip},#{amount};
-<!-- 			subject like #{subject}; -->
 	</select>
 	
 	<!-- 검색어 추천 - 중복 제거 -->
@@ -176,11 +112,92 @@
 		;
 	</select>
 	
+	<!-- 댓글 목록 -->
 	<select id="replyList" resultType="com.board.domain.ReplyDTO">
 		select rseq, bseq, name, content, rep, reg_date, re_step, re_level
 		from board_reply
 		where bseq = #{bseq}
 		order by rep, re_step;
 	</select>
+	
+	<!-- 댓글 삽입 -->
+	<insert id="replyRegister">
+		insert into board_reply (rseq, bseq, content, name, rep,  reg_date, re_step, re_level, parent_rseq, child)
+		values (#{rseq}, #{bseq}, #{content}, #{name}, #{rep}, #{reg_date}, #{re_step}, #{re_level}, #{parent_rseq}, #{child});
+	</insert>
+	
+	<!-- 현재 가장 큰 댓글 rseq(번호) 가져오기 -->
+	<select id="maxRSeq" resultType="java.lang.Integer">
+		select max(rseq)
+		from board_reply;
+	</select>
+	
+	<!-- 부모의 rep 값 가져오기 -->
+	<select id="ParentRep" resultType="java.lang.Integer">
+		select rep
+		from board_reply
+		where rseq = #{parent_rseq};
+	</select>
+	
+	<!-- 부모의 re_level 값 가져오기 -->
+	<select id="ParentReLevel" resultType="java.lang.Integer">
+		select re_level
+		from board_reply
+		where rseq = #{parent_rseq};
+	</select>
+	
+	<!-- 동일한 부모를 가진 대댓글들 중 가장 큰 re_step의 값 가져오기 -->
+	<select id="MaxParentReStep" resultType="java.lang.Integer">
+		select max(re_step)
+		from board_reply
+		where parent_rseq = #{parent_rseq};
+	</select>
+	
+	<!-- 부모의 re_step 값 가져오기 -->
+	<select id="ParentReStep" resultType="java.lang.Integer">
+		select re_step
+		from board_reply
+		where rseq = #{parent_rseq};
+	</select>
+	
+	<!-- 부모의 child 1 증가 -->
+	<update id="updateParentChild">
+		update board_reply
+		set child = child + 1
+		where rseq = #{parent_rseq};
+	</update>
+	
+	<!-- re_step 재설정 - 증가-->
+	<update id="updateReStep" parameterType="map">
+		update board_reply
+		set re_step = re_step + 1
+		where rep = #{rep} and re_step >= #{re_step};
+	</update>
+	
+	<select id="reply" resultType="com.board.domain.ReplyDTO">
+		select rseq, bseq, content, name, reg_date, rep, re_level, re_step, parent_rseq, child
+		from board_reply
+		where rseq = #{rseq};
+	</select>
+	
+	<!-- 댓글 삭제 -->
+	<delete id="deleteReply">
+		delete from board_reply
+		where rseq = #{rseq};
+	</delete>
+	
+	<!-- 부모의 child 1 증가 -->
+	<update id="updateParentChildDelete">
+		update board_reply
+		set child = child - 1
+		where rseq = #{rseq};
+	</update>
+	
+	<!-- re_step 재설정 - 감소 -->
+	<update id="updateReStepDelete" parameterType="map">
+		update board_reply
+		set re_step = re_step - 1
+		where rep = #{rep} and re_step >= #{re_step};
+	</update>
 
 </mapper>

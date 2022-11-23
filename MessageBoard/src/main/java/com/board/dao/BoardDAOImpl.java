@@ -36,14 +36,10 @@ public class BoardDAOImpl implements BoardDAO {
 	}
 	
 	@Override
-	public Integer getRMaxSeq() {
+	public Integer getMaxRseq() {
 		return sqlSession.selectOne(namespace + ".maxRSeq");
 	}
 	
-	@Override
-	public Integer getMaxRe_step(int rep) {
-		return sqlSession.selectOne(namespace + ".maxReStep", rep);
-	}
 	
 	@Override
 	public int register(BoardDTO dto) {
@@ -113,13 +109,7 @@ public class BoardDAOImpl implements BoardDAO {
 		sqlSession.update(namespace + ".updateReStep", map);
 		
 	}
-	
-	@Override
-	public Integer getMaxRe_levelStep(Map<String, Integer> map) {
-		return sqlSession.selectOne(namespace + ".maxReLevelStep", map);
-	}
-	
-	
+
 	@Override
 	public Integer getParentRep(Integer parent_rseq) {
 		return sqlSession.selectOne(namespace + ".ParentRep", parent_rseq);
@@ -140,5 +130,29 @@ public class BoardDAOImpl implements BoardDAO {
 	@Override
 	public Integer getParentRe_step(Integer parent_rseq) {
 		return sqlSession.selectOne(namespace + ".ParentReStep", parent_rseq);
+	}
+
+	@Override
+	public ReplyDTO reply(int rseq) {
+		return  sqlSession.selectOne(namespace + ".reply", rseq);
+	}
+	
+	@Override
+	public int deleteReply(int rseq) {
+		return sqlSession.delete(namespace + ".deleteReply", rseq);
+	}
+	
+	@Override
+	public void updateParentChildDelete(int rseq) {
+		sqlSession.update(namespace + ".updateParentChildDelete", rseq);
+		
+	}
+	
+	@Override
+	public void updateRe_stepDelete(Integer rep, Integer re_step) {
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		map.put("rep", rep);
+		map.put("re_step", re_step);
+		sqlSession.update(namespace + ".updateReStepDelete", map);
 	}
 }

@@ -48,22 +48,75 @@ public class BoardController {
 	@Autowired
 	private FileValidator fileValidator;
 	
-//	@RequestMapping(value = "/list", method = RequestMethod.GET)
-//	public String list(Locale locale, Model model) throws Exception {
-//		List<BoardDTO> list = service.list();
-//		// model.addAttribute(view에서의 변수 이름, controller에서의 변수 이름)
-//		// 매핑해서 view 부분으로 넘김
-//		model.addAttribute("list", list);
-//		
-//		return "/board/list";
-//	}
 	
-	// 글쓰기로 이동
+	// 글쓰기 페이지로 이동
 	@RequestMapping(value = "/registerView", method = RequestMethod.GET)
 	public String regiView(Locale locale, Model model) throws Exception {
 		return "/board/register";
 	}
 	
+	// 게시글 목록
+	// 첫 화면
+	@RequestMapping(value = "/list", method = RequestMethod.GET) 
+	public String list(Locale Locale, Criteria cri, Model model) throws Exception {
+		  List<BoardDTO> list = service.getListPaging(cri); //
+		  //model.addAttribute(view에서의 변수 이름, controller에서의 변수 이름) // 매핑해서 view 부분으로 넘김
+		  model.addAttribute("list", list);
+		  
+		  int total = service.getTotal(); 
+		  
+		  PageMakerDTO pageMake = new PageMakerDTO(cri,total); 
+		  model.addAttribute("pageMaker", pageMake);
+		  return "/board/list"; 
+	 }
+	 
+	// 게시글 목록
+	// 페이징 시 호출 됨
+	@ResponseBody
+	@RequestMapping(value = "/listPage", method = RequestMethod.GET, produces = "application/text; charset=utf8")
+	public String list(@RequestParam("pageNum") String pageNum, @RequestParam("amount") String amount, 
+			 Locale locale, Model model) throws Exception {
+		
+		Criteria cri = new Criteria(Integer.parseInt(pageNum), Integer.parseInt(amount));
+		List<BoardDTO> list = service.getListPaging(cri);
+		int total = service.getTotal();
+		
+		PageMakerDTO pageMake = new PageMakerDTO(cri, total);
+		
+		JsonObject resultJson = new JsonObject();
+		
+		JsonArray listJsonArray = new JsonArray();
+		for(int i = 0; i < list.size(); i++) {
+			JsonObject listJson = new JsonObject();
+			listJson.addProperty("seq", list.get(i).getSeq());
+			listJson.addProperty("subject", list.get(i).getSubject());
+			listJson.addProperty("content", list.get(i).getContent());
+			listJson.addProperty("name", list.get(i).getName());
+			listJson.addProperty("reg_date", list.get(i).getReg_date());
+			listJson.addProperty("readCount", list.get(i).getReadCount());
+			
+			listJsonArray.add(listJson);
+		}
+		
+		resultJson.add("list", listJsonArray);
+		
+		
+		JsonObject pageMakeJson = new JsonObject();
+		pageMakeJson.addProperty("startPage", pageMake.getStartPage());
+		pageMakeJson.addProperty("endPage", pageMake.getEndPage());
+		pageMakeJson.addProperty("prev", pageMake.isPrev());
+		pageMakeJson.addProperty("next", pageMake.isNext());
+		pageMakeJson.addProperty("total", pageMake.getTotal());
+		pageMakeJson.addProperty("pageNum", pageMake.getCri().getPageNum());
+		pageMakeJson.addProperty("amount", pageMake.getCri().getAmount());
+		
+		resultJson.add("pageMake", pageMakeJson);
+		String resultString = resultJson.toString();
+
+		return resultString;
+	}
+	
+
 	// 새 글 등록
 	@ResponseBody
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
@@ -84,38 +137,7 @@ public class BoardController {
 		}
 	}
 	
-	@RequestMapping(value = "/view", method = RequestMethod.GET)
-	public String view(Locale locale, Model model, HttpServletRequest request) throws Exception {
-		BoardDTO dto = service.view(Integer.parseInt((String)request.getParameter("seq")));
-		model.addAttribute("view", dto);
-		
-		int bseq = dto.getSeq();
-		List<ReplyDTO> list = service.replyList(bseq);
-		model.addAttribute("list", list);
-		
-		return "/board/view";
-		
-	}
-	
-	// 댓글 등록
-	@ResponseBody
-	@RequestMapping(value = "/reply/register", method = RequestMethod.POST)
-	public String replyRegister(Locale locale, Model model, ReplyDTO dto) throws Exception {
-		// 현재 시간
-		Date date = new Date(System.currentTimeMillis());
-		SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
-		dto.setReg_date(format.format(date));
-		
-		if(service.register(dto) == 1) {
-			return "Y";
-		}
-		
-		else {
-			return "N";
-		}
-	}
-
-
+	// 게시글 삭제
 	@ResponseBody
 	@RequestMapping(value = "/delete", method = RequestMethod.POST)
 	public String delete(Locale locale, Model model, HttpServletRequest request) throws Exception {
@@ -130,6 +152,7 @@ public class BoardController {
 		}
 	}
 	
+	// 게시글 수정 페이지로 이동
 	@RequestMapping(value = "/goUpdateView", method = RequestMethod.POST)
 	public String updateView(Locale locale, Model model, HttpServletRequest request) throws Exception {
 		BoardDTO dto = service.view(Integer.parseInt((String)request.getParameter("seq")));
@@ -137,7 +160,7 @@ public class BoardController {
 		return "/board/update";
 	}
 	
-	
+	// 게시글 수정
 	@ResponseBody
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String update(Locale locale, Model model, BoardDTO dto) throws Exception {
@@ -148,7 +171,8 @@ public class BoardController {
 		}
 	}
 	
-	
+	// 게시글 검색 - 제목 기준
+	// 첫 화면
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public String search(Locale locale, Model model, Criteria cri, @RequestParam String subject) throws Exception {
 		
@@ -166,7 +190,8 @@ public class BoardController {
 		return "/board/search";
 	}
 	
-	
+	// 게시글 검색 
+	// 페이징 시 호출 됨
 	@ResponseBody
 	@RequestMapping(value = "/searchPage", method = RequestMethod.GET, produces = "application/text; charset=utf8")
 	public String search(Locale locale, Model model,
@@ -215,65 +240,57 @@ public class BoardController {
 
 		return resultString;
 	}
-	
-	  
-	@RequestMapping(value = "/list", method = RequestMethod.GET) 
-	public String list(Locale Locale, Criteria cri, Model model) throws Exception {
-		  List<BoardDTO> list = service.getListPaging(cri); //
-		  //model.addAttribute(view에서의 변수 이름, controller에서의 변수 이름) // 매핑해서 view 부분으로 넘김
-		  model.addAttribute("list", list);
-		  
-		  int total = service.getTotal(); 
-		  
-		  PageMakerDTO pageMake = new PageMakerDTO(cri,total); 
-		  model.addAttribute("pageMaker", pageMake);
-		  return "/board/list"; 
-	 }
 	 
 	
-	@ResponseBody
-	@RequestMapping(value = "/listPage", method = RequestMethod.GET, produces = "application/text; charset=utf8")
-	public String list(@RequestParam("pageNum") String pageNum, @RequestParam("amount") String amount, 
-			 Locale locale, Model model) throws Exception {
+	
+	// 게시글 보기 + 댓글 보기
+	@RequestMapping(value = "/view", method = RequestMethod.GET)
+	public String view(Locale locale, Model model, HttpServletRequest request) throws Exception {
+		// 게시글
+		BoardDTO dto = service.view(Integer.parseInt((String)request.getParameter("seq")));
+		model.addAttribute("view", dto);
 		
-		Criteria cri = new Criteria(Integer.parseInt(pageNum), Integer.parseInt(amount));
-		List<BoardDTO> list = service.getListPaging(cri);
-		int total = service.getTotal();
+		// 댓글 목록
+		// bseq = 게시글 번호 = 게시글의 seq
+		int bseq = dto.getSeq();
+		List<ReplyDTO> list = service.replyList(bseq);
+		model.addAttribute("list", list);
 		
-		PageMakerDTO pageMake = new PageMakerDTO(cri, total);
+		return "/board/view";
 		
-		JsonObject resultJson = new JsonObject();
-		
-		JsonArray listJsonArray = new JsonArray();
-		for(int i = 0; i < list.size(); i++) {
-			JsonObject listJson = new JsonObject();
-			listJson.addProperty("seq", list.get(i).getSeq());
-			listJson.addProperty("subject", list.get(i).getSubject());
-			listJson.addProperty("content", list.get(i).getContent());
-			listJson.addProperty("name", list.get(i).getName());
-			listJson.addProperty("reg_date", list.get(i).getReg_date());
-			listJson.addProperty("readCount", list.get(i).getReadCount());
-			
-			listJsonArray.add(listJson);
-		}
-		
-		resultJson.add("list", listJsonArray);
-		
-		
-		JsonObject pageMakeJson = new JsonObject();
-		pageMakeJson.addProperty("startPage", pageMake.getStartPage());
-		pageMakeJson.addProperty("endPage", pageMake.getEndPage());
-		pageMakeJson.addProperty("prev", pageMake.isPrev());
-		pageMakeJson.addProperty("next", pageMake.isNext());
-		pageMakeJson.addProperty("total", pageMake.getTotal());
-		pageMakeJson.addProperty("pageNum", pageMake.getCri().getPageNum());
-		pageMakeJson.addProperty("amount", pageMake.getCri().getAmount());
-		
-		resultJson.add("pageMake", pageMakeJson);
-		String resultString = resultJson.toString();
-
-		return resultString;
 	}
 	
+	// 댓글 등록
+	@ResponseBody
+	@RequestMapping(value = "/reply/register", method = RequestMethod.POST)
+	public String replyRegister(Locale locale, Model model, ReplyDTO dto) throws Exception {
+		// 현재 시간
+		Date date = new Date(System.currentTimeMillis());
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+		dto.setReg_date(format.format(date));
+		
+		if(service.register(dto) == 1) {
+			return "Y";
+		}
+		
+		else {
+			return "N";
+		}
+	}
+
+	// 댓글 삭제
+	// 미완성
+	@ResponseBody
+	@RequestMapping(value = "/reply/delete", method = RequestMethod.POST)
+	public String replyDelete(Locale locale, Model model, HttpServletRequest request) throws Exception {
+		
+		if(service.deleteReply(Integer.parseInt((String)request.getParameter("rseq"))) == 1) {
+			return "Y";
+		}
+		
+		else {
+			return "N";
+		}
+	}
 }	
 

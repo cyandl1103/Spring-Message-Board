@@ -82,9 +82,6 @@
 					</thead>
 					<c:forEach items="${list}" var="list">
 						<input type="hidden" value="${list.rseq}" name="rseq" id="rseq">
-						<input type="hidden" value="${list.rep}" name="rep" id="rep">
-						<input type="hidden" value="${list.re_level}" name="re_level" id="re_level">
-						<input type="hidden" value="${list.re_step}" name="re_step" id="re_step">
 						<tbody>
 							<tr align="left">
 								<td style="font-weight: bold;">
@@ -96,7 +93,7 @@
 								<td style="color:#999999;" align="right"> <fmt:formatDate value="${dateValue}" pattern="yyyy-MM-dd"/></td>
 								<td style="width: 130px;">
 									<button class="btn btn-primary little" type="button" onclick='fn_replyReplyView(${list.rseq});' id="replyReplyView">답글</button>
-									<button class="btn btn-primary little" type="button" onclick='fn_replyDelete();' >삭제</button>
+									<button class="btn btn-primary little" type="button" onclick='fn_replyDelete(${list.rseq});' >삭제</button>
 								</td>
 							</tr>
 							<tr align="left">

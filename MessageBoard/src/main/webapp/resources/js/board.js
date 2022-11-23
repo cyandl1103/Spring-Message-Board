@@ -71,7 +71,7 @@ function fn_boardDelete(seq){
 	});
 };
 
-// 해당 번호(seq) 게시글 수정
+// 해당 번호(seq) 게시글 수정 페이지로 이동
 function fn_goUpdateView(seq){
 	$("#seq").val(seq);
 
@@ -122,22 +122,15 @@ function fn_boardUpdate(){
 
 // 댓글 등록
 function fn_replyRegister(){
-	var bseq = $("#bseq").val();
-	var name = $("#name").val();
-	var content = $("#content").val();
+	var bseq = $("#bseq").val(); // 게시물 번호
+	var name = $("#name").val(); // 댓글 작성자 이름
+	var content = $("#content").val(); // 댓글 내용
 	
 	// 제목이 없을 경우 알림 띄우고 게시글 등록하지 않음
 	if(!content || !name){
 		alert("이름과 내용을 입력해주세요!");
 		return;
 	}
-
-	
-	// type : get or post
-	// url : 통신할 url
-	// data : 서버로 보낼 데이터
-	// success : 통신 성공 시 호출해야 하는 함수
-	// fail : 통신 실패 시 호출해야 하는 함수
 	
 	$.ajax({
 		type : "POST",
@@ -159,64 +152,18 @@ function fn_replyRegister(){
 };
 
 
-// function fn_replyReplyRegister(rep, re_level, re_step){
-
-// 	var bseq = $("#bseq").val();
-// 	var name = $("#repName_" + rep + "_" + re_level + "_" + re_step).val();
-// 	var content = $("#repContent_" + rep + "_" + re_level+ "_" + re_step).val();
-// 	console.log("bseq : " + bseq + "	name : " + name + "	  content : " + content);
-	
-// 	// 제목이 없을 경우 알림 띄우고 게시글 등록하지 않음
-// 	if(!content || !name){
-// 		alert("이름과 내용을 입력해주세요!");
-// 		return;
-// 	}
-
-	
-// 	$.ajax({
-// 		type : "POST",
-// 		url : "/board/reply/register",
-// 		data : {
-// 			"bseq" : bseq,
-// 			"name" : name, 
-// 			"content" : content,
-// 			"rep" : rep,
-// 			"re_level" : re_level,
-// 			"re_step" : re_step
-// 		},
-	
-// 		success: function(data){
-// 			if(data == "Y"){
-// 				alert("댓글을 등록하였습니다.");
-// 				fn_goView(bseq);		
-// 			}
-// 		},
-		
-// 		error: function(data){
-// 			alert("댓글을 등록하는데 실패했습니다.");
-// 			console.log("data : ' " + data + " '");
-// 		}
-// 	});
-// };
-
-
+// 대댓글 등록
+// parent_rseq = 대댓글의 부모가 될 rseq
 function fn_replyReplyRegister(parent_rseq){
-	var bseq = $("#bseq").val();
-	var name = $("#repName_" + parent_rseq).val();
-	var content = $("#repContent_" + parent_rseq).val();
+	var bseq = $("#bseq").val(); // 게시물 번호
+	var name = $("#repName_" + parent_rseq).val(); // 댓글 작성자 이름
+	var content = $("#repContent_" + parent_rseq).val(); // 댓글 내용
 	
 	// 제목이 없을 경우 알림 띄우고 게시글 등록하지 않음
 	if(!content || !name){
 		alert("이름과 내용을 입력해주세요!");
 		return;
 	}
-
-	
-	// type : get or post
-	// url : 통신할 url
-	// data : 서버로 보낼 데이터
-	// success : 통신 성공 시 호출해야 하는 함수
-	// fail : 통신 실패 시 호출해야 하는 함수
 	
 	$.ajax({
 		type : "POST",
@@ -238,39 +185,16 @@ function fn_replyReplyRegister(parent_rseq){
 };
 
 
-
-// function fn_replyReplyView(rep, re_level, re_step){
-
-
-// 	var str = "";
-// 	// 대댓글 작성
-// 	$("#addReply_"+ rep + "_" + re_level + "_" + re_step).empty();
-
-// 	re_level++;
-// 	re_step++;
-
-// 	// rep 값과 다음 re_level, re_step 설정해줌
-// 	str += '<tr><td colspan="3"><input class="form-control mr-sm-2" type="text" placeholder="이름" id="repName_'+ rep + "_" + re_level + "_" + re_step +'" name="repName" maxlength="20" ></td></tr>';
-// 	str += '<tr><td colspan="3" style="border: none; padding-top:0.1rem"><textarea class="form-control mr-sm-2" type="text" placeholder="내용을 입력해주세요." id="repContent_' + rep + "_" + re_level + "_" + re_step + '" name="repContent" maxlength="100" rows="3"></textarea></td></tr>';
-// 	str += '<tr><td colspan="3" style="border: none;"><button class="btn btn-primary" type="button" onclick="fn_replyReplyRegister(' + rep + "," + re_level + ','+ re_step +');" style="float: right;">등록</button></td></tr>';
-
-// 	re_level--;
-// 	re_step--;
-
-// 	$("#addReply_"+ rep + "_" + re_level + "_" + re_step).append(str);
-
-// };
-
-
+// 대댓글 작성 폼 생성
 function fn_replyReplyView(parent_rseq){
 
-
 	var str = "";
-	// 대댓글 작성
+
+	// 대댓글 작성 부위(tbody)
 	$("#addReply_"+ parent_rseq).empty();
 
 
-	// rep 값과 다음 re_level, re_step 설정해줌
+	// 여기서 parent_rseq = 등록 기준이 될 부모 rseq가 된다는 의미
 	str += '<tr><td colspan="3"><input class="form-control mr-sm-2" type="text" placeholder="이름" id="repName_'+ parent_rseq +'" name="repName" maxlength="20" ></td></tr>';
 	str += '<tr><td colspan="3" style="border: none; padding-top:0.1rem"><textarea class="form-control mr-sm-2" type="text" placeholder="내용을 입력해주세요." id="repContent_' + parent_rseq + '" name="repContent" maxlength="100" rows="3"></textarea></td></tr>';
 	str += '<tr><td colspan="3" style="border: none;"><button class="btn btn-primary" type="button" onclick="fn_replyReplyRegister('+ parent_rseq + ');" style="float: right;">등록</button></td></tr>';
@@ -280,3 +204,29 @@ function fn_replyReplyView(parent_rseq){
 };
 
 
+function fn_replyDelete(rseq){
+	var bseq = $("#bseq").val();
+	$.ajax({
+		type : "POST",
+		url : "/board/reply/delete",
+		data : {"rseq" : rseq},
+	
+		success: function(data){
+			if(data == "Y"){
+				alert("댓글을 삭제하였습니다.");
+				fn_goView(bseq);		
+			}
+
+			else if (data == "N"){
+				alert("대댓글이 있는 댓글은 삭제할 수 없습니다.");
+				//fn_goView(bseq);	
+			}
+		},
+		
+		error: function(data){
+			alert("댓글을 삭제할 수 없습니다.");
+			console.log("data : ' " + data + " '");
+		}
+	});
+
+}

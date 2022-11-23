@@ -26,16 +26,20 @@ public interface BoardDAO {
 	public int register(ReplyDTO dto);
 	
 	public List<ReplyDTO> replyList(int bseq) throws Exception;
-	public Integer getRMaxSeq();
-	public Integer getMaxRe_step(int rep);
-	public Integer getMaxRe_levelStep(Map<String, Integer> map);
+	public Integer getMaxRseq();
 	
 	public void updateRe_step(int rep, int re_step);
-	
-	
+
 	public Integer getParentRep(Integer parent_rseq);
 	public Integer getParentRe_level(Integer parent_rseq);
 	public Integer getMaxParentRe_step(Integer parent_rseq);
 	public void updateParentChild(Integer parent_rseq);
 	public Integer getParentRe_step(Integer parent_rseq);
+	
+	ReplyDTO reply(int rseq);
+	
+	public int deleteReply(int rseq);
+	public void updateParentChildDelete(int rseq);
+	public void updateRe_stepDelete(Integer rep, Integer re_step);
+
 }
