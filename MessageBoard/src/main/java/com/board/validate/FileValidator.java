@@ -1,4 +1,4 @@
-package com.board.service;
+package com.board.validate;
 
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;

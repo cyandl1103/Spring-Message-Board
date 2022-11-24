@@ -27,8 +27,13 @@
 					<img src="${path}/resources/images/logo.png" class="board-logo" alt="Logo Image">
 					<a class="navbar-brand" href="/board/list">게시판 웹 사이트</a>
 				</div>
+				
+				<div class="navbar-brand user">
+					<a class="navbar-brand" href="#" onclick="fn_userMenu();">${userName}</a>
+				</div>
 			</nav>
 		</div>
+		
 		<div class="body-container">
 			<div class="body-board">
 				<div class="frm-title">${view.subject}</div>
@@ -44,6 +49,15 @@
 							<td style="word-break:break-all">${view.content}</td>
 						</tr>
 						<tr>
+							<th scope="row">파일</th>
+							<c:choose>
+								<c:when test="${file_name ne null}">
+									<td> <a href="#" onclick="fn_downloadFile('${view.file}')"> ${file_name} </a> </td>
+								</c:when>
+								<c:when test="${file_name eq null}"><td></td></c:when>
+							</c:choose>
+						</tr>
+						<tr>
 							<td colspan="3" style="padding-top: 20px;">
 								<button class="btn btn-primary" type="button" onclick='location.href="/board/list"'>목록</button>
 								<button class="btn btn-primary" type="button" onclick='fn_goUpdateView(${view.seq})'>수정</button>
@@ -53,13 +67,20 @@
 					</table>
 				</form>
 			</div>
-			
+
 			<div class="body-regReply">
 				<form id="replyFrm" method="post">
 					<table class="table">
 						<tr><th scope="row" class="reply-title">댓글 작성</th></tr>
 						<tr>
-							<td><input class="form-control mr-sm-2" type="text" placeholder="이름" id="name" name="name" maxlength="20" ></td>
+							<c:choose>
+								<c:when test="${userName eq null}">
+									<td><input class="form-control mr-sm-2" type="text" placeholder="이름" id="name" name="name" maxlength="20"></td>
+								</c:when>
+								<c:when test="${userName ne null}">
+									<td><input class="form-control mr-sm-2" type="text" placeholder="${userName}" id="name" name="name" maxlength="20" value="${userName}" readonly></td>
+								</c:when>
+							</c:choose>
 						</tr>
 						<tr>
 							<td style="border: none; padding-top:0.1rem"><textarea class="form-control mr-sm-2" type="text" placeholder="내용을 입력해주세요." id="content" name="content" maxlength="100" rows="3"></textarea></td>
@@ -92,7 +113,15 @@
 								<fmt:parseDate value="${list.reg_date}" var="dateValue" pattern="yyyyMMddHHmmss"/>
 								<td style="color:#999999;" align="right"> <fmt:formatDate value="${dateValue}" pattern="yyyy-MM-dd"/></td>
 								<td style="width: 130px;">
-									<button class="btn btn-primary little" type="button" onclick='fn_replyReplyView(${list.rseq});' id="replyReplyView">답글</button>
+								<c:choose>
+									<c:when test="${userName eq null}">
+										<button class="btn btn-primary little" type="button" onclick='fn_replyReplyView(${list.rseq}, "");' id="replyReplyView">답글</button>
+									</c:when>
+									<c:when test="${userName ne null}">
+										<button class="btn btn-primary little" type="button" onclick='fn_replyReplyView(${list.rseq}, "${userName}");' id="replyReplyView">답글</button>
+									</c:when>
+								</c:choose>
+									
 									<button class="btn btn-primary little" type="button" onclick='fn_replyDelete(${list.rseq});' >삭제</button>
 								</td>
 							</tr>

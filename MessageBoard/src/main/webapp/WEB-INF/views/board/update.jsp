@@ -25,6 +25,9 @@
 					<img src="${path}/resources/images/logo.png" class="board-logo" alt="Logo Image">
 					<a class="navbar-brand" href="/board/list">게시판 웹 사이트</a>
 				</div>
+				<div class="navbar-brand user">
+					<a class="navbar-brand" href="#" onclick="fn_userMenu();">${userName}</a>
+				</div>
 			</nav>
 		</div>
 		<div class="body-container">

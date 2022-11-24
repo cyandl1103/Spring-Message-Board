@@ -32,10 +32,35 @@
 	
 		<div class="body-container">
 			<div class="home-content">
-				<P id="timeNow">  현재 시각 : ${serverTime}. </P>
+<%-- 				<P id="timeNow">  현재 시각 : ${serverTime}. </P> --%>
+				<div class="home-login">
+
+					<form action="/user/loginCheck" id="loginFrm" method="post">
+						<table class="table">
+							<tbody class="table-no-border">
+								<tr>
+									<th scope="row">아이디</th>
+									<td><input id="id" name="id" type="text" placeholder="아이디" class="form-control mr-sm-2" required></td>
+								</tr>
+								<tr>
+									<th scope="row">비밀번호</th>
+									<td><input id="pw" name="pw" type="password" placeholder="비밀번호" class="form-control mr-sm-2" required></td>
+								</tr>
+								<tr>
+									<td colspan="2"><button type="submit" class="btn btn-primary" style="width : 100%"> 로그인 </button></td>
+								</tr>
+								
+								<tr>
+									<td colspan="2" style="text-align: center"><a href="user/registerView"> 회원가입 </a></td>
+								</tr>
+							</tbody>
+						</table>
+					</form>
+				</div>
+				
 			</div>
 			<div class="home-button">
-				<button class="btn btn-primary" type="button" onclick='location.href="/board/list"'>게시판 목록</button>
+				<button class="btn btn-primary" type="button" onclick='location.href="/board/list"'>비회원으로 계속하기</button>
 				<button class="btn btn-primary" type="button" onclick='practice();'>JS 연습</button>
 			</div>
 		</div>

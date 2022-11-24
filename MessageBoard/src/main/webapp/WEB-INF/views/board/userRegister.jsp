@@ -25,50 +25,39 @@
 			<nav class="navbar navbar-dark bg-dark">
 				<div class="body-title">
 					<img src="${path}/resources/images/logo.png" class="board-logo" alt="Logo Image">
-					<a class="navbar-brand" href="/board/list">게시판 웹 사이트</a>
+					<a class="navbar-brand" href="/">게시판 웹 사이트</a>
 				</div>
-				<div class="navbar-brand user">
-					<a class="navbar-brand" href="#" onclick="fn_userMenu();">${userName}</a>
-				</div>
+
 			</nav>
 		</div>
 		
 		<div class="body-container">
-			<div class="frm-title">글쓰기</div>
+			<div class="frm-title">회원가입</div>
 			
-			<form:form id="regForm" method="post" enctype="multipart/form-data" modelAttribute="uploadFile" action="upload">
+			<form id="regForm" method="post" action="userRegister">
 				<table class="table">
-					<tr>
-						<th scope="row">제목</th>
-						<td><input class="form-control mr-sm-2" type="text" placeholder="" id="subject" name="subject" maxlength="200"></td>
-					</tr>
-					<tr>
-						<th scope="row">작성자</th>
-						<c:choose>
-							<c:when test="${userName eq null}">
-								<td><input class="form-control mr-sm-2" type="text" placeholder="" id="name" name="name" maxlength="20"></td>
-							</c:when>
-							<c:when test="${userName ne null}">
-								<td>${userName}</td>
-							</c:when>
-						</c:choose>
-					</tr>
-					<tr>
-						<th scope="row">내용</th>
-						<td><textarea class="form-control mr-sm-2" type="text" placeholder="" id="content" name="content" maxlength="1000" rows="8"></textarea></td>
-					</tr>
-					<tr>
-						<th scope="row">파일</th>
-						<td><input class="form-control mr-sm-2" type="file" id="file" name="file"></td>
-					</tr>
-					<tr>
-						<td colspan="2" style="padding-top: 20px;">
-							<button class="btn btn-primary" type="button" onclick='location.href="/board/list"'>취소</button>
-							<button class="btn btn-primary" type="button" onclick="fn_boardRegister();"  style="float: right;"> 등록 </button>
-						</td>
-					</tr>
+					<tbody class="table-border">
+						<tr>
+							<th scope="row">아이디</th>
+							<td><input class="form-control mr-sm-2" type="text" placeholder="아이디" id="userId" name="userId" maxlength="20"></td>
+						</tr>
+						<tr>
+							<th scope="row">비밀번호</th>
+							<td><input class="form-control mr-sm-2" type="password" placeholder="비밀번호" id="userPw" name="userPw" maxlength="20"></td>
+						</tr>
+						<tr>
+							<th scope="row">이름</th>
+							<td><input class="form-control mr-sm-2" type="text" placeholder="이름" id="userName" name="userName" maxlength="20"></td>
+						</tr>
+	
+						<tr>
+							<td colspan="2" style="padding-top: 20px;">
+								<button class="btn btn-primary" type="button" onclick="fn_userRegister();"> 가입하기 </button>
+							</td>
+						</tr>
+					</tbody>
 				</table>
-			</form:form>
+			</form>
 		</div>
 		
 		<div class="board-footer bg-dark">

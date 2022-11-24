@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.board.mappers.user">
+	<!-- SQL의 모든 쿼리들을 작성함 -->
+	
+	<!-- 로그인 정보 일치 여부 확인 -->
+	<select id="loginCheck" resultType="String">
+		select name
+		from user
+		where id = #{id} and pw = #{pw};
+	</select>
+	
+
+	<!-- 회원가입 -->
+	<insert id="register">
+		insert into user(id, pw, name, admin)
+		values (#{id}, #{pw}, #{name}, 0);
+	</insert>
+	
+</mapper>

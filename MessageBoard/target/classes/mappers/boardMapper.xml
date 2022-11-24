@@ -19,8 +19,8 @@
 
 	<!-- 게시글 삽입 -->
 	<insert id="register">
-		insert into board(seq, subject, content, name, reg_date, readCount)
-		values (#{seq}, #{subject}, #{content}, #{name}, #{reg_date},0);
+		insert into board(seq, subject, content, name, reg_date, readCount, file)
+		values (#{seq}, #{subject}, #{content}, #{name}, #{reg_date},0, #{file});
 	</insert>
 	
 
@@ -34,7 +34,7 @@
 	
 	<!-- 게시물 조회 -->
 	<select id="view" resultType="com.board.domain.BoardDTO">
-		select seq, subject, content, name, reg_date, readCount
+		select seq, subject, content, name, reg_date, readCount, file
 		from board
 		where seq = #{seq};
 	</select>

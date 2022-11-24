@@ -10,6 +10,7 @@ public class BoardDTO {
 	String name;
 	String reg_date;
 	Integer readCount;
+	String file;
 	
 	// DTO
 	public Integer getSeq() {
@@ -48,6 +49,13 @@ public class BoardDTO {
 	public void setReadCount(Integer readCount) {
 		this.readCount = readCount;
 	}
+	public String getFile() {
+		return file;
+	}
+	public void setFile(String file) {
+		this.file = file;
+	}
+	
 	
 	
 }

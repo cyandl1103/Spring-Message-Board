@@ -30,16 +30,22 @@
 					<img src="${path}/resources/images/logo.png" class="board-logo" alt="Logo Image">
 					<a class="navbar-brand" href="/board/list">게시판 웹 사이트</a>
 				</div>
-				<form class="form-inline" id="searchForm" method="get" action="/board/search">
-						<input class="form-control mr-sm-2" type="text" id="subject" name="subject" placeholder="검색어를 입력하세요" required>
-						<button class="btn btn-primary" type="submit">검색</button>
-				</form>
+				
+				<div class="navbar-brand user">
+					<a class="navbar-brand" href="#" onclick="fn_userMenu();">${userName}</a>
+				</div>
 			</nav>
 		</div>
-		
+		<div class="body-search">
+			<form class="form-inline" id="searchForm" method="get" action="/board/search">
+				<input class="form-control mr-sm-2" type="text" id="subject" name="subject" placeholder="검색어를 입력하세요" required>
+				<button class="btn btn-primary" type="submit">검색</button>
+			</form>
+		</div>
 		<div class="body-container">
+		
 			<div class="frm-title">
-			게시판 목록
+			게시판 목록 
 			</div>
 			<div class="frm-button">
 				<button class="btn btn-primary" type="button" onclick="location.href='registerView'">글 쓰기</button>
