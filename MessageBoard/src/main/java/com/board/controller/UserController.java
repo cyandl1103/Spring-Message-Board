@@ -59,7 +59,6 @@ public class UserController {
 	@ResponseBody
 	@RequestMapping(value="/register", method = RequestMethod.POST)
 	public String userRegister(Locale locale, Model model, UserDTO dto) {
-		System.out.println(dto.getName());
 		int result = service.userRegister(dto);
 		
 		if(result == 1)
