@@ -1,10 +1,10 @@
 package com.board.domain;
 
 public class UserDTO {
-	private String id;
-	private String pw;
-	private String name;
-	private Integer admin;
+	private String id; // 아이디
+	private String pw; // 비밀번호
+	private String name; // 이름
+	private Integer admin; // 관리자 여부 1 or 0, default 0, 따로 조작 안하고 mapper에서 0으로 설정함.. 불필요
 	
 	
 	public String getId() {

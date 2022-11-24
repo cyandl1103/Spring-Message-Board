@@ -150,8 +150,6 @@ function fn_boardUpdate(){
 		alert("제목을 입력해주세요!");
 		return;
 	}
-	
-	// console.log(subject + " " + name + " " + content);
 
 	$.ajax({
 		type : "POST",
@@ -264,7 +262,7 @@ function fn_replyReplyView(parent_rseq, userName){
 
 };
 
-
+// 대댓글 삭제
 function fn_replyDelete(rseq){
 	var bseq = $("#bseq").val();
 	$.ajax({
@@ -292,6 +290,7 @@ function fn_replyDelete(rseq){
 
 }
 
+// 내비게이션 바에 있는 유저 이름 누르면 로그아웃 할지 물음
 function fn_userMenu(){
 	var logout = confirm("로그아웃 하시겠습니까?");
 	if(logout){
@@ -299,11 +298,13 @@ function fn_userMenu(){
 	}
 }
 
+// 회원 가입 요청
 function fn_userRegister(){
 	var userId = $("#userId").val();
 	var userPw = $("#userPw").val();
 	var userName = $("#userName").val();
 
+	// 아이디, 비밀번호, 이름 공백일 시 회원가입 진행 안함
 	if(!userId){
 		alert("아이디를 입력해주세요!");
 		return;

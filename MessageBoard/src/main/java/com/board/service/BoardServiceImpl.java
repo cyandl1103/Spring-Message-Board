@@ -18,12 +18,14 @@ public class BoardServiceImpl implements BoardService {
 	@Inject
 	private BoardDAO dao;
 	
+	// 게시글 목록
 	@Override
 	public List<BoardDTO> list() throws Exception {
 		// TODO Auto-generated method stub
 		return dao.list();
 	}
 	
+	// 게시글 등록
 	@Override
 	public int register(BoardDTO dto) throws Exception {
 		// TODO Auto-generated method stub
@@ -39,52 +41,62 @@ public class BoardServiceImpl implements BoardService {
 		return dao.register(dto);
 	}
 	
+	// 게시글 조회
 	@Override
 	public BoardDTO view(int seq) {
 		dao.updateReadCount(seq);
 		return dao.view(seq);
 	}
 	
+	// 게시글 삭제
 	@Override
 	public int delete(int seq) {
 		return dao.delete(seq);
 	}
 	
+	// 게시글 수정
 	@Override
 	public int update(BoardDTO dto) {
 		return dao.update(dto);
 	}
 	
+	// 게시글 검색
 	@Override
 	public List<BoardDTO> search(String subject) throws Exception {
 		return dao.search(subject);
 	}
 	
+	// 게시글 페이징 처리
 	@Override
 	public List<BoardDTO> getListPaging(Criteria cri) {
 		return dao.getListPaging(cri);
 	}
 	
+	// 총 게시글의 수
 	@Override
 	public int getTotal() {
 		return dao.getTotal();
 	}
 	
+	// 검색된 게시글 페이징 처리
 	@Override
 	public int getTotal(String subject) {
 		return dao.getTotal(subject);
 	}
 	
+	// 검색된 게시글의 수
 	@Override
 	public List<BoardDTO> getSearchPaging(CriteriaSearch criSearch) throws Exception {
 		return dao.getSearchPaging(criSearch);
 	}
 	
+	// 댓글 목록
 	@Override
 	public List<ReplyDTO> replyList(int bseq) throws Exception {
 		return dao.replyList(bseq);
 	}
 	
+	// 댓글 등록
 	@Override
 	public int register(ReplyDTO dto) throws Exception {
 		
@@ -104,16 +116,17 @@ public class BoardServiceImpl implements BoardService {
 			dao.updateParentChild(dto.getParent_rseq()); // 부모의 자식 수 1 증가
 			dao.updateRe_step(dto.getRep(), dto.getRe_step()); // 뒷번호의 re_step들 1씩 증가 시킴
 			
-			// 대댓글의 rseq 부여
+			// 대댓글의 rseq 부여 - 최대 rseq + 1
 			Integer rmax = dao.getMaxRseq();
 			dto.setRseq(rmax + 1);
 		}
 		// 댓글일 때
 		else {
-			// 새로운 댓글일 시 새로운 rseq, rep 부여
+			// rseq 최댓값
 			Integer rmax = dao.getMaxRseq();
 			// 댓글이 하나도 없을 때
 			if(rmax == null) { 
+				// 첫번째로 지정
 				dto.setRseq(1);
 				dto.setRep(1);
 			}
@@ -135,6 +148,7 @@ public class BoardServiceImpl implements BoardService {
 		return dao.register(dto);
 	}
 	
+	// 댓글 삭제
 	@Override
 	public int deleteReply(int rseq) {
 		ReplyDTO dto = dao.reply(rseq);

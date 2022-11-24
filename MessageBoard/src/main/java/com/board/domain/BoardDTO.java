@@ -4,13 +4,13 @@ package com.board.domain;
 
 public class BoardDTO {
 	// Entity
-	Integer seq;
-	String subject;
-	String content;
-	String name;
-	String reg_date;
-	Integer readCount;
-	String file;
+	Integer seq; // 게시물 번호
+	String subject; // 제목
+	String content; // 내용
+	String name; // 작성자
+	String reg_date; // 등록일
+	Integer readCount; // 조회수
+	String file; // 첨부 파일
 	
 	// DTO
 	public Integer getSeq() {

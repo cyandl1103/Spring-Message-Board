@@ -1,6 +1,7 @@
 package com.board.domain;
 
 public class CriteriaSearch extends Criteria{
+	// 검색을 위해 기존 criteria에서 검색 기준이 될 제목을 추가
 	private String subject;
 
 	
@@ -13,8 +14,6 @@ public class CriteriaSearch extends Criteria{
 		super(pageNum, amount);
 		this.subject = subject;
 	}
-
-
 
 
 	public String getSubject() {
