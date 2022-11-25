@@ -153,6 +153,18 @@
 		where parent_rseq = #{parent_rseq};
 	</select>
 	
+	<select id="RseqFromReStep" resultType="java.lang.Integer">
+		select rseq
+		from board_reply
+		where re_step = #{re_step} and parent_rseq = #{parent_rseq};
+	</select>
+	
+	<select id="getChild" resultType="java.lang.Integer">
+		select child
+		from board_reply
+		where rseq = #{rseq};
+	</select>
+	
 	<!-- 부모의 re_step 값 가져오기 -->
 	<select id="ParentReStep" resultType="java.lang.Integer">
 		select re_step

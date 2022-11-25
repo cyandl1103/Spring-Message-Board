@@ -41,5 +41,8 @@ public interface BoardDAO {
 	public int deleteReply(int rseq);
 	public void updateParentChildDelete(int rseq);
 	public void updateRe_stepDelete(Integer rep, Integer re_step);
+	
+	public Integer getParentsLastChild(Integer parent_max_re_step, Integer parent_rseq);
+	public int getChild(Integer child_rseq);
 
 }

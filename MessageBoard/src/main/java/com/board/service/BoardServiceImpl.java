@@ -106,8 +106,28 @@ public class BoardServiceImpl implements BoardService {
 			dto.setRe_level(dao.getParentRe_level(dto.getParent_rseq()) + 1); // 부모의 re_level보다 1 크게 설정
 			
 			// 부모에 대댓글이 존재할 때
-			if(dao.getMaxParentRe_step(dto.getParent_rseq()) != null)
-				dto.setRe_step(dao.getMaxParentRe_step(dto.getParent_rseq()) + 1); // 부모의 자식 중 가장 큰 re_step보다 1 크게 설정
+			if(dao.getMaxParentRe_step(dto.getParent_rseq()) != null) {
+				
+				// dto의 부모의 마지막 자식에 자식이 있는지 확인
+				Integer parent_rseq = dto.getParent_rseq(); // dto의 부모 rseq
+				Integer parent_max_re_step = dao.getMaxParentRe_step(parent_rseq);  // 부모의 마지막 자식의 re_step
+				Integer child_rseq = dao.getParentsLastChild(parent_max_re_step, parent_rseq); // 부모의 마지막 자식의 rseq
+				
+				int child_count = 0; // 자식의 자식의 자식.. 누적된 자식 수
+				
+				// 마지막 자식에 자식이 존재하면
+				while(dao.getChild(child_rseq) != 0) {
+					child_count += dao.getChild(child_rseq); // 자식의 자식 수
+					
+					// 다음 깊이의 자식을 확인
+					parent_rseq = child_rseq; // 기존 자식을 부모로 설정
+					parent_max_re_step = dao.getMaxParentRe_step(parent_rseq);  // 부모의 마지막 자식의 re_step
+					child_rseq = dao.getParentsLastChild(parent_max_re_step, parent_rseq); // 마지막 자식 rseq
+				}
+				
+				// 부모의 자식 중 가장 큰 re_step을 기준으로 child 수 + 1로 설정
+				dto.setRe_step(dao.getMaxParentRe_step(dto.getParent_rseq()) + child_count + 1); 
+			}
 			// 부모에 대댓글이 존재하지 않을 때
 			else
 				dto.setRe_step(dao.getParentRe_step(dto.getParent_rseq()) + 1); // 부모의 re_step보다 1 크게 설정
