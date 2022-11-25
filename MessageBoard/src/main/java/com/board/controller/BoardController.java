@@ -6,41 +6,37 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintWriter;
+import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import javax.inject.Inject;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
+
 import org.springframework.util.FileCopyUtils;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.board.domain.BoardDTO;
 import com.board.domain.Criteria;
 import com.board.domain.CriteriaSearch;
 import com.board.domain.PageMakerDTO;
 import com.board.domain.ReplyDTO;
-import com.board.domain.UploadFile;
 import com.board.service.BoardService;
 import com.board.validate.FileValidator;
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -160,43 +156,33 @@ public class BoardController {
 		dto.setReg_date(format.format(date));
 		
 		if(service.register(dto) == 1) {
-			//System.out.println("yes");
 			return "Y";
 		}
 		
 		else {
-			//System.out.println("no");
 			return "N";
 		}
 	}
 	
 	// 파일 업로드
 	@ResponseBody
-	@RequestMapping(value ="/upload", method = RequestMethod.POST)
-	public String fileUpload(@RequestParam("file") MultipartFile multi) {
-		
-		System.out.println(multi.getOriginalFilename());
-		UploadFile uploadFile = new UploadFile();
-		
-		uploadFile.setMpfile(multi);
-		uploadFile.setName(multi.getOriginalFilename());
+	@RequestMapping(value ="/upload", method = RequestMethod.POST, produces = "application/text; charset=utf-8")
+	public String fileUpload(MultipartHttpServletRequest multi )
+			throws ServletException, IOException {
 		
 		// validator doesnt work at the moment
 //		fileValidator.validate(uploadFile, result);
 //		if(result.hasErrors()) {
 //			return null;
 //		}
+
 		
-		MultipartFile file = uploadFile.getMpfile();
-		String name = file.getOriginalFilename();
+        MultipartFile file = multi.getFile("file");
+		String name = URLDecoder.decode(file.getOriginalFilename(), "UTF-8");
 		
 		Date date = new Date(System.currentTimeMillis());
 		SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
 		name += format.format(date);
-		
-		
-		UploadFile fileObj = new UploadFile();
-		fileObj.setName(name);
 		
 		InputStream inputStream = null;
 		OutputStream outputStream = null;
@@ -205,7 +191,7 @@ public class BoardController {
 			inputStream = file.getInputStream();
 			String path = "D:\\WorkspaceG\\Spring-Message-Board\\MessageBoard\\src\\main\\webapp\\resources\\storage";
 			//String path = WebUtils.getRealPath(request.getSession().getServletContext(), "/resources/storage");
-			System.out.println("업로드 실제 경로 : " + path);
+			// System.out.println("업로드 실제 경로 : " + path);
 			
 			File storage = new File(path);
 			
@@ -236,8 +222,6 @@ public class BoardController {
 			e.printStackTrace();
 		}
 		
-		//model.addAttribute("fileObj", fileObj);
-		
 		return name;
 	}
 	
@@ -245,7 +229,7 @@ public class BoardController {
 	@ResponseBody
 	@RequestMapping(value = "/download")
 	public byte[] fileDownload(HttpServletResponse response, @RequestParam("file") String name) {
-		
+	
 		byte[] down = null;
 		
 		try {
@@ -254,9 +238,10 @@ public class BoardController {
 			File file = new File(path + "/" + name);
 			
 			down = FileCopyUtils.copyToByteArray(file);
-			String filename = new String(file.getName().getBytes(), "8859_1");
+			String filename = URLDecoder.decode(file.getName(), "UTF-8");
 			filename = filename.substring(0, filename.length()-14);
-			
+				
+			response.setCharacterEncoding("UTF-8");
 			response.setHeader("Content-Disposition", "attachment; filename=\"" + filename + "\"");
 			response.setContentLength(down.length);
 			
@@ -275,12 +260,10 @@ public class BoardController {
 	@RequestMapping(value = "/delete", method = RequestMethod.POST)
 	public String delete(Locale locale, Model model, HttpServletRequest request) throws Exception {
 		if(service.delete(Integer.parseInt((String)request.getParameter("seq"))) == 1) {
-			//System.out.println("yes");
 			return "Y";
 		}
 		
 		else {
-			//System.out.println("no");
 			return "N";
 		}
 	}

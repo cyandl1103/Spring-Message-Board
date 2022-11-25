@@ -1,14 +1,13 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
     <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="EUC-KR" name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="${path}/resources/js/board.js" charset="utf-8"></script>
-<title>°Ô½ÃÆÇ À¥ »çÀÌÆ®</title>
+<title>ê²Œì‹œíŒ ì›¹ ì‚¬ì´íŠ¸</title>
 
 <!--  bootstrap css -->
 <link rel="stylesheet" 
@@ -25,7 +24,7 @@
 			<nav class="navbar navbar-dark bg-dark">
 				<div class="body-title">
 					<img src="${path}/resources/images/logo.png" class="board-logo" alt="Logo Image">
-					<a class="navbar-brand" href="/board/list">°Ô½ÃÆÇ À¥ »çÀÌÆ®</a>
+					<a class="navbar-brand" href="/board/list">ê²Œì‹œíŒ ì›¹ ì‚¬ì´íŠ¸</a>
 				</div>
 				<div class="navbar-brand user">
 					<a class="navbar-brand" href="#" onclick="fn_userMenu();">${userName}</a>
@@ -34,16 +33,16 @@
 		</div>
 		
 		<div class="body-container">
-			<div class="frm-title">±Û¾²±â</div>
+			<div class="frm-title">ê¸€ì“°ê¸°</div>
 			
-			<form:form id="regForm" method="post" enctype="multipart/form-data" modelAttribute="uploadFile" action="upload">
+			<form:form id="regForm" method="post" enctype="multipart/form-data" modelAttribute="uploadFile" action="upload" accept-charset="UTF-8">
 				<table class="table">
 					<tr>
-						<th scope="row">Á¦¸ñ</th>
+						<th scope="row">ì œëª©</th>
 						<td><input class="form-control mr-sm-2" type="text" placeholder="" id="subject" name="subject" maxlength="200"></td>
 					</tr>
 					<tr>
-						<th scope="row">ÀÛ¼ºÀÚ</th>
+						<th scope="row">ìž‘ì„±ìž</th>
 						<c:choose>
 							<c:when test="${userName eq null}">
 								<td><input class="form-control mr-sm-2" type="text" placeholder="" id="name" name="name" maxlength="20"></td>
@@ -54,17 +53,17 @@
 						</c:choose>
 					</tr>
 					<tr>
-						<th scope="row">³»¿ë</th>
+						<th scope="row">ë‚´ìš©</th>
 						<td><textarea class="form-control mr-sm-2" type="text" placeholder="" id="content" name="content" maxlength="1000" rows="8"></textarea></td>
 					</tr>
 					<tr>
-						<th scope="row">ÆÄÀÏ</th>
+						<th scope="row">íŒŒì¼</th>
 						<td><input class="form-control mr-sm-2" type="file" id="file" name="file"></td>
 					</tr>
 					<tr>
 						<td colspan="2" style="padding-top: 20px;">
-							<button class="btn btn-primary" type="button" onclick='location.href="/board/list"'>Ãë¼Ò</button>
-							<button class="btn btn-primary" type="button" onclick="fn_boardRegister();"  style="float: right;"> µî·Ï </button>
+							<button class="btn btn-primary" type="button" onclick='location.href="/board/list"'>ì·¨ì†Œ</button>
+							<button class="btn btn-primary" type="button" onclick="fn_boardRegister();"  style="float: right;"> ë“±ë¡ </button>
 						</td>
 					</tr>
 				</table>

@@ -1,14 +1,13 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="EUC-KR" name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="${path}/resources/js/board.js" charset="utf-8"></script>
-<title>°Ô½ÃÆÇ À¥ »çÀÌÆ®</title>
+<title>ê²Œì‹œíŒ ì›¹ ì‚¬ì´íŠ¸</title>
 
 <!--  bootstrap css -->
 <link rel="stylesheet" 
@@ -25,7 +24,7 @@
 			<nav class="navbar navbar-dark bg-dark">
 				<div class="body-title">
 					<img src="${path}/resources/images/logo.png" class="board-logo" alt="Logo Image">
-					<a class="navbar-brand" href="/board/list">°Ô½ÃÆÇ À¥ »çÀÌÆ®</a>
+					<a class="navbar-brand" href="/board/list">ê²Œì‹œíŒ ì›¹ ì‚¬ì´íŠ¸</a>
 				</div>
 				
 				<div class="navbar-brand user">
@@ -41,15 +40,15 @@
 					<input type="hidden" value="${view.seq}" name="seq" id="seq">
 					<table class="table">
 						<tr>
-							<th scope="row">ÀÛ¼ºÀÚ</th>
+							<th scope="row">ìž‘ì„±ìž</th>
 							<td> ${view.name}</td>
 						</tr>
 						<tr>
-							<th scope="row" width="90px" >³»¿ë</th>
+							<th scope="row" width="90px" >ë‚´ìš©</th>
 							<td style="word-break:break-all">${view.content}</td>
 						</tr>
 						<tr>
-							<th scope="row">ÆÄÀÏ</th>
+							<th scope="row">íŒŒì¼</th>
 							<c:choose>
 								<c:when test="${file_name ne null}">
 									<td> <a href="#;" onclick="fn_downloadFile('${view.file}')"> ${file_name} </a> </td>
@@ -59,9 +58,9 @@
 						</tr>
 						<tr>
 							<td colspan="3" style="padding-top: 20px;">
-								<button class="btn btn-primary" type="button" onclick='location.href="/board/list"'>¸ñ·Ï</button>
-								<button class="btn btn-primary" type="button" onclick='fn_goUpdateView(${view.seq})'>¼öÁ¤</button>
-								<button class="btn btn-primary" type="button" onclick='fn_boardDelete(${view.seq})'>»èÁ¦</button>
+								<button class="btn btn-primary" type="button" onclick='location.href="/board/list"'>ëª©ë¡</button>
+								<button class="btn btn-primary" type="button" onclick='fn_goUpdateView(${view.seq})'>ìˆ˜ì •</button>
+								<button class="btn btn-primary" type="button" onclick='fn_boardDelete(${view.seq})'>ì‚­ì œ</button>
 							</td>
 						</tr>
 					</table>
@@ -71,11 +70,11 @@
 			<div class="body-regReply">
 				<form id="replyFrm" method="post">
 					<table class="table">
-						<tr><th scope="row" class="reply-title">´ñ±Û ÀÛ¼º</th></tr>
+						<tr><th scope="row" class="reply-title">ëŒ“ê¸€ ìž‘ì„±</th></tr>
 						<tr>
 							<c:choose>
 								<c:when test="${userName eq null}">
-									<td><input class="form-control mr-sm-2" type="text" placeholder="ÀÌ¸§" id="name" name="name" maxlength="20"></td>
+									<td><input class="form-control mr-sm-2" type="text" placeholder="ì´ë¦„" id="name" name="name" maxlength="20"></td>
 								</c:when>
 								<c:when test="${userName ne null}">
 									<td><input class="form-control mr-sm-2" type="text" placeholder="${userName}" id="name" name="name" maxlength="20" value="${userName}" readonly></td>
@@ -83,11 +82,11 @@
 							</c:choose>
 						</tr>
 						<tr>
-							<td style="border: none; padding-top:0.1rem"><textarea class="form-control mr-sm-2" type="text" placeholder="³»¿ëÀ» ÀÔ·ÂÇØÁÖ¼¼¿ä." id="content" name="content" maxlength="100" rows="3"></textarea></td>
+							<td style="border: none; padding-top:0.1rem"><textarea class="form-control mr-sm-2" type="text" placeholder="ë‚´ìš©ì„ ìž…ë ¥í•´ì£¼ì„¸ìš”." id="content" name="content" maxlength="100" rows="3"></textarea></td>
 						</tr>
 						<tr>
 							<td colspan="3" style="border: none;">
-								<button class="btn btn-primary" type="button" onclick="fn_replyRegister();" style="float: right;">µî·Ï</button>
+								<button class="btn btn-primary" type="button" onclick="fn_replyRegister();" style="float: right;">ë“±ë¡</button>
 							</td>
 						</tr>
 					</table>
@@ -99,7 +98,7 @@
 
 				<table class="table" id="listTable">
 					<thead class="table table-hover">
-						<tr><th scope="row" class="reply-title" colspan="4">´ñ±Û</th></tr>
+						<tr><th scope="row" class="reply-title" colspan="4">ëŒ“ê¸€</th></tr>
 					</thead>
 					<c:forEach items="${list}" var="list">
 						<input type="hidden" value="${list.rseq}" name="rseq" id="rseq">
@@ -115,14 +114,14 @@
 								<td style="width: 130px;">
 								<c:choose>
 									<c:when test="${userName eq null}">
-										<button class="btn btn-primary little" type="button" onclick='fn_replyReplyView(${list.rseq}, "");' id="replyReplyView">´ä±Û</button>
+										<button class="btn btn-primary little" type="button" onclick='fn_replyReplyView(${list.rseq}, "");' id="replyReplyView">ë‹µê¸€</button>
 									</c:when>
 									<c:when test="${userName ne null}">
-										<button class="btn btn-primary little" type="button" onclick='fn_replyReplyView(${list.rseq}, "${userName}");' id="replyReplyView">´ä±Û</button>
+										<button class="btn btn-primary little" type="button" onclick='fn_replyReplyView(${list.rseq}, "${userName}");' id="replyReplyView">ë‹µê¸€</button>
 									</c:when>
 								</c:choose>
 									
-									<button class="btn btn-primary little" type="button" onclick='fn_replyDelete(${list.rseq});' >»èÁ¦</button>
+									<button class="btn btn-primary little" type="button" onclick='fn_replyDelete(${list.rseq});' >ì‚­ì œ</button>
 								</td>
 							</tr>
 							<tr align="left">

@@ -28,8 +28,10 @@ function fn_boardRegister(){
 			contentType : false, 
 			data : formData,
 			async : false, 
+			dataType:"text",
 			success: function(data){
 				file_name = data;
+				console.log(data);
 			  },
 			  err: function(err){
 				console.log("err:", err)
@@ -77,7 +79,7 @@ function fn_downloadFile(file){
 	$.ajax({
 		type : "POST",
 		url : "/board/download",
-		contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+		contentType: "application/x-www-form-urlencoded; charset=UTF-8",
 		data : {
 			"file" : file
 		},
@@ -100,12 +102,12 @@ function fn_downloadFile(file){
 			if (xhr.readyState == 4 && xhr.status == 200) {
 				// 성공했을때만 파일 다운로드 처리하고
 				let disposition = xhr.getResponseHeader('Content-Disposition'); 
-				let filename; 
-				if (disposition && disposition.indexOf('attachment') !== -1) { 
-					let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/; 
-					let matches = filenameRegex.exec(disposition); 
-					if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, ''); 
-				} 
+				let filename = file.substring(0,file.length-14); 
+				// if (disposition && disposition.indexOf('attachment') !== -1) { 
+				// 	let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/; 
+				// 	let matches = filenameRegex.exec(disposition); 
+				// 	if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, ''); 
+				// } 
 				let blob = new Blob([data]); 
 				let link = document.createElement('a'); 
 				link.href = window.URL.createObjectURL(blob); 
