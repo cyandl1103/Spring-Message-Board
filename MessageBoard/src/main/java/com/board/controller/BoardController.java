@@ -244,8 +244,7 @@ public class BoardController {
 	// 파일 다운로드
 	@ResponseBody
 	@RequestMapping(value = "/download")
-	public byte[] fileDownload(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam("file") String name) {
+	public byte[] fileDownload(HttpServletResponse response, @RequestParam("file") String name) {
 		
 		byte[] down = null;
 		

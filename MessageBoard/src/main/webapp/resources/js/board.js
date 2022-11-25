@@ -85,7 +85,13 @@ function fn_downloadFile(file){
 			let xhr = new XMLHttpRequest(); 
 			xhr.onreadystatechange = function () { 
 				//response 데이터를 바이너리로 처리한다. 세팅하지 않으면 default가 text 
-				xhr.responseType = "blob"; 
+				// LOADING과 DONE에서는 responseType 설정을 못하는 예외 발생하므로 무시하도록 설정
+				try{
+					xhr.responseType = "blob";
+				}
+				catch(e){
+					
+				} 
 			}; 
 			return xhr; 
 		},
