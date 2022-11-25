@@ -45,6 +45,12 @@
 		where seq = #{seq};
 	</delete>
 	
+	<select id="getFileName" resultType="java.lang.String">
+		select file 
+		from board
+		where seq = #{seq};
+	</select>
+	
 	<!-- 게시물 삭제 -->
 	<update id="update">
 		update board

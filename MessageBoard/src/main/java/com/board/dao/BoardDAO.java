@@ -15,6 +15,7 @@ public interface BoardDAO {
 	public void updateReadCount(int seq); // 조회수 1 증가
 	public BoardDTO view(int seq); // 게시물 조회
 	public int delete(int seq); // 게시물 삭제
+	public String getFileName(int seq); // 게시물의 파일 이름 반환
 	public int update(BoardDTO dto); // 게시물 수정
 	public List<BoardDTO> search(String subject) throws Exception ; // 게시물 검색
 	

@@ -58,12 +58,17 @@ public class BoardDAOImpl implements BoardDAO {
 	
 	@Override
 	public BoardDTO view(int seq) {
-		return  sqlSession.selectOne(namespace + ".view", seq);
+		return sqlSession.selectOne(namespace + ".view", seq);
 	}
 	
 	@Override
 	public int delete(int seq) {
 		return sqlSession.delete(namespace + ".delete", seq);
+	}
+	
+	@Override
+	public String getFileName(int seq) {
+		return sqlSession.selectOne(namespace + ".getFileName", seq);
 	}
 	
 	@Override

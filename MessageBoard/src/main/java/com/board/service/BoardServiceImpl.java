@@ -1,5 +1,6 @@
 package com.board.service;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,6 +52,24 @@ public class BoardServiceImpl implements BoardService {
 	// 게시글 삭제
 	@Override
 	public int delete(int seq) {
+
+		// 파일의 경로 + 파일명
+        String filepath = "D:\\WorkspaceG\\Spring-Message-Board\\MessageBoard\\src\\main\\webapp\\resources\\storage\\";
+        
+		//파일이 있는지 확인
+        String filename = dao.getFileName(seq);
+        if(filename!= "") {
+        	filepath += filename;
+            File deleteFile = new File(filepath);
+     
+            // 파일이 존재하는지 체크 존재할경우 true, 존재하지않을경우 false
+            if(deleteFile.exists()) {  
+                // 파일을 삭제합니다.
+                deleteFile.delete(); 
+            }
+        }
+
+		
 		return dao.delete(seq);
 	}
 	
