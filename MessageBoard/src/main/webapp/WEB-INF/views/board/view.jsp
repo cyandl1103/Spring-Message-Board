@@ -52,7 +52,7 @@
 							<th scope="row">ÆÄÀÏ</th>
 							<c:choose>
 								<c:when test="${file_name ne null}">
-									<td> <a href="#" onclick="fn_downloadFile('${view.file}')"> ${file_name} </a> </td>
+									<td> <a href="#;" onclick="fn_downloadFile('${view.file}')"> ${file_name} </a> </td>
 								</c:when>
 								<c:when test="${file_name eq null}"><td></td></c:when>
 							</c:choose>

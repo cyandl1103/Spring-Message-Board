@@ -77,13 +77,39 @@ function fn_downloadFile(file){
 	$.ajax({
 		type : "POST",
 		url : "/board/download",
+		contentType: "application/x-www-form-urlencoded;charset=UTF-8",
 		data : {
 			"file" : file
 		},
-	
-		success: function(data){
-			console.log("파일 다운로드 완료");		
-			console.log(data);
+		xhr: function () { 
+			let xhr = new XMLHttpRequest(); 
+			xhr.onreadystatechange = function () { 
+				//response 데이터를 바이너리로 처리한다. 세팅하지 않으면 default가 text 
+				xhr.responseType = "blob"; 
+			}; 
+			return xhr; 
+		},
+		
+		success: function (data, message, xhr) { 
+			if (xhr.readyState == 4 && xhr.status == 200) {
+				// 성공했을때만 파일 다운로드 처리하고
+				let disposition = xhr.getResponseHeader('Content-Disposition'); 
+				let filename; 
+				if (disposition && disposition.indexOf('attachment') !== -1) { 
+					let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/; 
+					let matches = filenameRegex.exec(disposition); 
+					if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, ''); 
+				} 
+				let blob = new Blob([data]); 
+				let link = document.createElement('a'); 
+				link.href = window.URL.createObjectURL(blob); 
+				link.download = filename; 
+				link.click(); 
+			} 
+			else {   
+			    //실패했을때는 alert 메시지 출력
+				alertPopup("다운로드에 실패하였습니다."); 
+			} 
 		},
 		
 		error: function(data){
