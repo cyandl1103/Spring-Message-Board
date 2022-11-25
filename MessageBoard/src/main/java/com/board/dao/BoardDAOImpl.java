@@ -132,6 +132,20 @@ public class BoardDAOImpl implements BoardDAO {
 		return sqlSession.selectOne(namespace + ".ParentReStep", parent_rseq);
 	}
 
+	
+	@Override
+	public Integer getParentsLastChild(Integer parent_max_re_step, Integer parent_rseq) {
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		map.put("re_step", parent_max_re_step);
+		map.put("parent_rseq", parent_rseq);
+		return sqlSession.selectOne(namespace + ".RseqFromReStep", map);
+	}
+	
+	@Override
+	public int getChild(Integer child_rseq) {
+		return sqlSession.selectOne(namespace + ".getChild", child_rseq);
+	}
+	
 	@Override
 	public ReplyDTO reply(int rseq) {
 		return  sqlSession.selectOne(namespace + ".reply", rseq);
@@ -156,16 +170,5 @@ public class BoardDAOImpl implements BoardDAO {
 		sqlSession.update(namespace + ".updateReStepDelete", map);
 	}
 	
-	@Override
-	public Integer getParentsLastChild(Integer parent_max_re_step, Integer parent_rseq) {
-		Map<String, Integer> map = new HashMap<String, Integer>();
-		map.put("re_step", parent_max_re_step);
-		map.put("parent_rseq", parent_rseq);
-		return sqlSession.selectOne(namespace + ".RseqFromReStep", map);
-	}
-	
-	@Override
-	public int getChild(Integer child_rseq) {
-		return sqlSession.selectOne(namespace + ".getChild", child_rseq);
-	}
+
 }

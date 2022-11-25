@@ -153,12 +153,14 @@
 		where parent_rseq = #{parent_rseq};
 	</select>
 	
+	<!-- 부모의 마지막 자식 찾음 -->
 	<select id="RseqFromReStep" resultType="java.lang.Integer">
 		select rseq
 		from board_reply
 		where re_step = #{re_step} and parent_rseq = #{parent_rseq};
 	</select>
 	
+	<!-- 자식의 수 가져옴 -->
 	<select id="getChild" resultType="java.lang.Integer">
 		select child
 		from board_reply
